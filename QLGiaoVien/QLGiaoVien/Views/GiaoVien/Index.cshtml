@@ -1,0 +1,76 @@
+﻿@{
+    ViewBag.Title = "Danh Sách Giáo Viên";
+}
+@model QLGiaoVien.Repository.GiaoVienRepository
+
+<link href="http://cdn-na.infragistics.com/igniteui/2019.1/latest/css/themes/infragistics/infragistics.theme.css" rel="stylesheet" />
+<link href="http://cdn-na.infragistics.com/igniteui/2019.1/latest/css/structure/infragistics.css" rel="stylesheet" />
+
+
+<table id="grid"></table>
+
+<script src="https://www.igniteui.com/data-files/nw-products.js"></script>
+<script>
+    $(function () {
+       
+        $("#grid").igGrid({
+            primaryKey: "ProductID",
+            caption: "<span> <img src=\"//www.infragistics.com/media/441501/horz_logo.png\" alt=\"Infragistics\"></span>",
+            width: '100%',
+            columns: [
+                { headerText: "Product ID", key: "ProductID", dataType: "number", width: "15%", hidden: true },
+                { headerText: "Product Name", key: "ProductName", dataType: "string", width: "25%" },
+                { headerText: "Category", key: "CategoryName", dataType: "string", width: "25%" },
+                { headerText: "Units In Stock", key: "InStock", dataType: "number", width: "35%" }
+            ],
+            autofitLastColumn: false,
+            autoGenerateColumns: false,
+            dataSource: northwindProducts,
+            responseDataKey: "results",
+            autoCommit: true,
+            features: [
+                {
+                    name: "Sorting",
+                    sortingDialogContainment: "window"
+                },
+                {
+                    name: "Filtering",
+                    type: "local",
+                    columnSettings: [
+                        {
+                            columnKey: "InStock",
+                            condition: "greaterThan"
+                        }
+                    ]
+                },
+                {
+                    name: "GroupBy",
+                    columnSettings: [
+                        {
+                            columnKey: "CategoryName",
+                            isGroupBy: true
+                        }
+                    ]
+                },
+                {
+                    name: "Selection"
+                },
+                {
+                    name: "Paging",
+                    pageSize: 10
+                },
+                {
+                    name: "Resizing"
+                },
+                {
+                    name: "Updating",
+                    editMode: "dialog",
+                    enableAddRow: false,
+                    columnSettings: [
+                        
+                    ]
+                }
+            ]
+        });
+    });
+</script>

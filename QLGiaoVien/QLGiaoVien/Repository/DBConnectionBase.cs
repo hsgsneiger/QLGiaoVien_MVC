@@ -11,7 +11,7 @@ namespace QLGiaoVien.DatabaseAccess
 
         public DBConnectionBase()
         {
-            _connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            _connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["ConnectionStrings"].ConnectionString;
         }
 
 
