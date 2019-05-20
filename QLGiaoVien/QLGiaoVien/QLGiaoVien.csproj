@@ -136,6 +136,10 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\GiaoVienController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\HuongDanController.cs" />
+    <Compile Include="Controllers\NghienCuuController.cs" />
+    <Compile Include="Helpers\ConvertData.cs" />
+    <Compile Include="Helpers\SqlHelper.cs" />
     <Compile Include="Repository\DBConnectionBase.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -1965,6 +1969,8 @@
     <Content Include="vendor\jquery\jquery.min.map" />
     <Content Include="vendor\jquery\jquery.slim.min.map" />
     <Content Include="Views\GiaoVien\Index.cshtml" />
+    <Content Include="Views\HuongDan\Index.cshtml" />
+    <Content Include="Views\NghienCuu\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
