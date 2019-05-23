@@ -1,6 +1,4 @@
-﻿using Common;
-using DTO;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Configuration;
@@ -11,7 +9,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace QLGiaoVien.Helpers
+namespace Utils
 {
     public class SqlHelper<T>
     {
@@ -156,7 +154,7 @@ namespace QLGiaoVien.Helpers
             }
             return result;
         }
-        public List<T> ExecuteProcAndGetData(string name_proc,int MaGiaoVien,int MaNamHoc)
+        public List<T> ExecuteProcAndGetData(string name_proc,int MaGiaoVien,int? MaNamHoc=null)
         {
             List<T> result = new List<T>();
             DataSet ds = new DataSet();
