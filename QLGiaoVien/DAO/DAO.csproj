@@ -45,6 +45,9 @@
     <Compile Include="GuideDAOForList.cs" />
     <Compile Include="LecturerDAO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ResearchDaoForList.cs" />
+    <Compile Include="ResearchProc.cs" />
+    <Compile Include="ResearchView.cs" />
     <Compile Include="YearDAO.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

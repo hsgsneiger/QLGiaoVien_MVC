@@ -9,8 +9,10 @@ namespace QLGiaoVien.Controllers
 {
     public class BaseController : Controller
     {
-        protected HuongDanBL HuongDan_Service = new HuongDanBL();
+        protected GuideBL HuongDan_Service = new GuideBL();
         protected SearchInfoBL SearchInfo_Service = new SearchInfoBL();
+        protected ResearchBL Research_Service = new ResearchBL();
+
 
     }
 }

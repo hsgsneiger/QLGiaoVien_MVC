@@ -19,7 +19,14 @@ namespace QLGiaoVien.Controllers
         }
         public PartialViewResult _DanhSach(int MaGV = 0, int? MaNamHoc=null)
         {
-            List<GuideView> list = HuongDan_Service.GetAll(MaGV, MaNamHoc);
+            List<GuideView> list = new List<GuideView>();
+            try
+            {
+                list = HuongDan_Service.GetAll(MaGV, MaNamHoc);
+            } catch(Exception e)
+            {
+                throw e;
+            }
             return PartialView(list);
         }
     }

@@ -1,4 +1,4 @@
-﻿@model List<DAO.GuideView>
+﻿@model List<DAO.ResearchView>
 
 <!-- Begin Page Content -->
 <div class="container-fluid">
@@ -14,14 +14,11 @@
                     <thead>
                         <tr>
                             <th>STT</th>
-                            <th>Họ tên học viên</th>
-                            <th>Lớp</th>
-                            <th>Hệ</th>
-                            <th>Tên đề tài / Chuyên đề</th>
-                            <th>Định mức</th>
-                            <th>Số CBHĐ</th>
-                            <th>Số giờ</th>
-
+                            <th>Tên công trình khoa học</th>
+                            <th>Loại</th>
+                            <th>Vai trò</th>
+                            <th>Số tác giả</th>
+                            <th>Giờ chuẩn</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -31,28 +28,24 @@
                             {
                                 <tr class="bg-gray-500 font-weight-bold">
                                     <td>@(i + 1)</td>
-                                    <td colspan="4">@Model[i].TenLoaiHuongDan</td>
-                                    <td>@Model[i].SoGioDinhMuc</td>
-                                    <td></td>
-                                    <td>@Model[i].TongSoGio.ToString("N2")</td>
+                                    <td colspan="3">@Model[i].TenNhomNCKH</td>
+                                    <td>@Model[i].TongSoGio</td>
                                 </tr>
                                 for (int j = 0; j < Model[i].ChiTiet.Count; j++)
                                 {
                                     <tr>
                                         <td class="pl-5">@(j + 1)</td>
-                                        <td>@Model[i].ChiTiet[j].HoTenHocVien</td>
-                                        <td>@Model[i].ChiTiet[j].Lop</td>
-                                        <td>@Model[i].ChiTiet[j].TenHeHuongDan</td>
-                                        <td>@Model[i].ChiTiet[j].TenDeTai_ChuyenDe</td>
-                                        <td></td>
-                                        <td>@Model[i].ChiTiet[j].SoCBHD</td>
-                                        <td>@Model[i].ChiTiet[j].SoGio.ToString("N2")</td>
+                                        <td>@Model[i].ChiTiet[j].TenDeTai</td>
+                                        <td>@Model[i].ChiTiet[j].TenLoai</td>
+                                        <td>@Model[i].ChiTiet[j].TenVaiTro</td>
+                                        <td>@Model[i].ChiTiet[j].SoTacGia</td>
+                                        <td>@(Model[i].ChiTiet[j].SoGioChuan.ToString("N2"))</td>
                                     </tr>
                                 }
                             }
                             <tr class="bg-gray-500 font-weight-bold">
-                                <td colspan="7">Tổng số</td>
-                                <td>@Model.Sum(x => x.TongSoGio).ToString("N2")</td>
+                                <td colspan="3">Tổng số</td>
+                                <td>@Model.Sum(x=>x.TongSoGio)</td>
                             </tr>
                         }
 
@@ -64,4 +57,3 @@
 
 </div>
 <!-- /.container-fluid -->
-

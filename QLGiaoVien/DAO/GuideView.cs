@@ -9,6 +9,8 @@ namespace DAO
     {
         public string TenLoaiHuongDan { get; set; }
         public double SoGioDinhMuc { get; set; }
+        public double TongSoGio { get; set; }
+
         public List<GuideDAOForList> ChiTiet { get; set; }
 
     }

@@ -1,5 +1,5 @@
 ﻿class Features {
-    static exportToExcel(tableID,lecaturesName) {
+    static exportToExcel(tableID,lecturesName) {
         const dataType = 'data:application/vnd.ms-excel,';
         let tableSelect = document.getElementById(tableID);
 

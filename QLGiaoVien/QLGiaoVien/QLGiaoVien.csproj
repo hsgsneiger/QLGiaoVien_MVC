@@ -1974,6 +1974,7 @@
     <Content Include="Views\HuongDan\Index.cshtml" />
     <Content Include="Views\NghienCuu\Index.cshtml" />
     <Content Include="Views\HuongDan\_DanhSach.cshtml" />
+    <Content Include="Views\NghienCuu\_DanhSach.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
