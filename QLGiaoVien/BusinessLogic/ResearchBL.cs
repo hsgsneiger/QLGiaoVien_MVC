@@ -22,7 +22,7 @@ namespace BusinessLogic
 
                 researchView.TenNhomNCKH = tmp.FirstOrDefault().TenNhomNCKH;
 
-                researchView.ChiTiet = tmp.Select(x => new ResearchDaoForList() { SoGioChuan = x.SoGioChuan*x.TyLeNhan/x.SoTacGia, SoTacGia = x.SoTacGia, TenDeTai = x.TenDeTai, TenLoai = x.TenLoai, TenVaiTro = x.TenVaiTro, TyLeNhan = x.TyLeNhan }).ToList();
+                researchView.ChiTiet = tmp.Select(x => new ResearchDaoForList() { SoGioChuan = x.SoGioChuan * x.TyLeLoai + x.SoGioChuan*x.TyLeVaiTro/x.SoTacGia, SoTacGia = x.SoTacGia, TenDeTai = x.TenDeTai, TenLoai = x.TenLoai, TenVaiTro = x.TenVaiTro}).ToList();
                 researchView.TongSoGio = researchView.ChiTiet.Sum(x=>x.SoGioChuan);
 
                 listResearch_View.Add(researchView);

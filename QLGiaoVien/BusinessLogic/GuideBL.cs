@@ -23,7 +23,7 @@ namespace BusinessLogic
                 guide_view.TenLoaiHuongDan = tmp.FirstOrDefault().TenLoaiHuongDan;
                 guide_view.SoGioDinhMuc = tmp.FirstOrDefault().SoGioDinhMuc;
                 guide_view.ChiTiet = tmp.Select(x => new GuideDAOForList() { HoTenHocVien = x.HoTenHocVien, Lop = x.Lop, SoCBHD = x.SoCBHD, TenHeHuongDan = x.TenHeHuongDan,SoGio = guide_view.SoGioDinhMuc/x.SoCBHD, TenDeTai_ChuyenDe=x.TenDeTai_ChuyenDe }).ToList();
-                guide_view.TongSoGio = tmp.Sum(x => x.SoGioDinhMuc);
+                guide_view.TongSoGio = guide_view.ChiTiet.Sum(x => x.SoGio);
                 lstGuide_View.Add(guide_view);
 
             }

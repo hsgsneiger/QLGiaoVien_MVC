@@ -28,7 +28,7 @@
                             {
                                 <tr class="bg-gray-500 font-weight-bold">
                                     <td>@(i + 1)</td>
-                                    <td colspan="3">@Model[i].TenNhomNCKH</td>
+                                    <td colspan="4">@Model[i].TenNhomNCKH</td>
                                     <td>@Model[i].TongSoGio</td>
                                 </tr>
                                 for (int j = 0; j < Model[i].ChiTiet.Count; j++)
@@ -39,13 +39,13 @@
                                         <td>@Model[i].ChiTiet[j].TenLoai</td>
                                         <td>@Model[i].ChiTiet[j].TenVaiTro</td>
                                         <td>@Model[i].ChiTiet[j].SoTacGia</td>
-                                        <td>@(Model[i].ChiTiet[j].SoGioChuan.ToString("N2"))</td>
+                                        <td>@(Model[i].ChiTiet[j].SoGioChuan.ToString("N0"))</td>
                                     </tr>
                                 }
                             }
                             <tr class="bg-gray-500 font-weight-bold">
-                                <td colspan="3">Tổng số</td>
-                                <td>@Model.Sum(x=>x.TongSoGio)</td>
+                                <td colspan="5">Tổng số</td>
+                                <td>@Model.Sum(x=>x.TongSoGio).ToString("N0")</td>
                             </tr>
                         }
 
