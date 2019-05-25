@@ -1,76 +1,420 @@
 ﻿@{
     ViewBag.Title = "Danh Sách Giáo Viên";
 }
-@model QLGiaoVien.Repository.GiaoVienRepository
+@using Newtonsoft.Json;
+@model List<DAO.Lecturer_DAO1>
+<style>
 
+    /* The switch - the box around the slider */
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: 60px;
+        height: 27px;
+    }
+
+        /* Hide default HTML checkbox */
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+    /* The slider */
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 19px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+    input:checked + .slider {
+        background-color: #4e73df;
+    }
+
+    input:focus + .slider {
+        box-shadow: 0 0 1px #2196F3;
+    }
+
+    input:checked + .slider:before {
+        -webkit-transform: translateX(26px);
+        -ms-transform: translateX(26px);
+        transform: translateX(26px);
+    }
+
+    /* Rounded sliders */
+    .slider.round {
+        border-radius: 34px;
+    }
+
+        .slider.round:before {
+            border-radius: 50%;
+        }
+</style>
 <link href="http://cdn-na.infragistics.com/igniteui/2019.1/latest/css/themes/infragistics/infragistics.theme.css" rel="stylesheet" />
 <link href="http://cdn-na.infragistics.com/igniteui/2019.1/latest/css/structure/infragistics.css" rel="stylesheet" />
 
+<div class="container-fluid">
+    
+    <div class="row d-flex justify-content-between">
+        <a style="margin-bottom:10px" href="@Url.Action("Create", "GiaoVien")" class="btn btn-success" role="button"> <i class="fa fa-plus-circle"></i> New</a>
+        @*<button class="btn btn-success" style="margin-bottom:5px">New</button>*@
+        <div style="margin-top:13px">
+            <label style="padding-right:10px;"><b>Edit</b></label>
+            <label class="switch">
+                <input type="checkbox" id="editCheckBox" checked />
+                <span class="slider"></span>
+            </label>
+        </div>
+    </div>
+    <div class="row">
+        <table id="grid"></table>
 
-<table id="grid"></table>
+    </div>
+    <div class="row" style="padding-top:10px">
+        <button title="Save Changes" class="btn btn-success btn-sm" id="saveChanges">Save Changes</button>
+        <div class=" offset-md-10">
+            <button title="import data" type="button" class="btn btn-info btn-sm">
+                <i class="fa fa-file-import"></i>
+            </button>
+            <button title="export data" type="button" class="btn btn-warning btn-sm">
+                <i class="fa fa-file-export"></i>
+            </button>
+        </div>
+    </div>
+</div>
 
-<script src="https://www.igniteui.com/data-files/nw-products.js"></script>
-<script>
-    $(function () {
-       
-        $("#grid").igGrid({
-            primaryKey: "ProductID",
-            caption: "<span> <img src=\"//www.infragistics.com/media/441501/horz_logo.png\" alt=\"Infragistics\"></span>",
-            width: '100%',
-            columns: [
-                { headerText: "Product ID", key: "ProductID", dataType: "number", width: "15%", hidden: true },
-                { headerText: "Product Name", key: "ProductName", dataType: "string", width: "25%" },
-                { headerText: "Category", key: "CategoryName", dataType: "string", width: "25%" },
-                { headerText: "Units In Stock", key: "InStock", dataType: "number", width: "35%" }
-            ],
-            autofitLastColumn: false,
-            autoGenerateColumns: false,
-            dataSource: northwindProducts,
-            responseDataKey: "results",
-            autoCommit: true,
-            features: [
-                {
-                    name: "Sorting",
-                    sortingDialogContainment: "window"
+<!-- dialog confirm, success, error-->
+<div class="external-content">
+    <div id="confirmDialog"></div>
+    <div id="successDialog"></div>
+    <div id="errorDialog"></div>
+</div>
+<div class="loader"></div>
+
+@section scripts {
+<script type="text/javascript">
+        var lastOpenConfirmDialog = "";
+        // lấy data từ model
+        var data = @(Html.Raw(JsonConvert.SerializeObject(Model.ToList())));
+        // lấy ds lớp chuyên ngành từ view bag(để hiển thị lên dropdown list)
+        var lopChuyenNganhList =  @(Html.Raw(JsonConvert.SerializeObject(ViewBag.lstLopChuyenNganh)));
+    console.log(lopChuyenNganhList)
+
+        // init object Giới tính cho dropdown giới tính
+        function formatGender(val) {
+                if (val === 1)
+                    return "Nam";
+                return "Nữ";
+        };
+
+        var genderValue = [{ "ID": 1, "value": "Nam" }, { "ID": 0, "value": "Nữ" }];
+
+        var Id = ""
+        // hàm xoá hàng, chạy khi ấn button Delete trên hàng
+        function DeleteRow(rowId) {
+            this.Id = rowId;
+            // Gọi confirmDialog, truyền vào id nút, text hiển thị, hàm call back khi nhấn ok (DeleteSV)
+            confirmDialog("btn-delete-row", message.dsSinhVien.sv01.replace("%0", $("#grid").igGrid("getCellText", rowId, "HoTen") ), DeleteSV, null, true);
+        }
+
+        // Hàm xoá sinh viên (chạy khi ấn vào button OK ở confirm dialog)
+        function DeleteSV() {
+            $.ajax({
+                url: 'SinhVien/Delete/' + this.Id,
+                type: 'Get',
+                async: true,
+                dataType: 'json',
+                processData: false,
+                contentType: false,
+                success: function (result) {
+                    if (result == "Success") {
+                        // thông báo
+                        $("#successDialog .ui-dialog-content").text(message.dsSinhVien.sv02.replace("%0", ""));
+                        $("#successDialog").igDialog("open");
+                        $("#grid").igGridUpdating("deleteRow", Id);
+                    } else {
+                        $("#successDialog .ui-dialog-content").text(message.dsSinhVien.sv03.replace("%0", ""));
+                        $("#successDialog").igDialog("open");
+                    }
                 },
-                {
-                    name: "Filtering",
-                    type: "local",
-                    columnSettings: [
-                        {
-                            columnKey: "InStock",
-                            condition: "greaterThan"
-                        }
-                    ]
+                error: function (res) {
+                    console.log(res)
                 },
-                {
-                    name: "GroupBy",
-                    columnSettings: [
-                        {
-                            columnKey: "CategoryName",
-                            isGroupBy: true
-                        }
-                    ]
-                },
-                {
-                    name: "Selection"
-                },
-                {
-                    name: "Paging",
-                    pageSize: 10
-                },
-                {
-                    name: "Resizing"
-                },
-                {
-                    name: "Updating",
-                    editMode: "dialog",
-                    enableAddRow: false,
-                    columnSettings: [
-                        
-                    ]
+                complete: function (jqRes, textStatus) {
                 }
-            ]
-        });
-    });
+            });
+        }
+
+
+
+        ///
+        /// Hàm xuất dialog comfirm
+        /// message: thông báo, callbackOK: hàm call back khi ấn ok, isLoading: màn hình load khi ấn ok.
+        function confirmDialog(btnid, message, callbackOk, callbackCancel, isLoading) {
+            console.log(message)
+            if (lastOpenConfirmDialog !== btnid) {
+                lastOpenConfirmDialog = btnid;
+                $("#confirmDialog").igDialog({
+                    modal: true,
+                    resizable: false,
+                    state: "open",
+                    showHeader: true,
+                    showFooter: true,
+                    headerText: "Xác nhận",
+                    minHeight: 200,
+                    footerText: "<button id='ok-" + btnid + "' type='button' class='btn btn-xs btn-danger'>" + "OK" + "</button> <button id='cancel-" + btnid + "' type='button' class='btn btn-xs btn-default'>" + "Cancel" + "</button>"
+                });
+
+                // Sự kiện khi ấn buttin cancel
+                $("#confirmDialog #cancel-" + btnid).on("click", function () {
+                    if (callbackCancel && typeof callbackCancel === "function") {
+                        callbackCancel();
+                    }
+                    $("#confirmDialog").igDialog("close");
+                });
+
+                // gọi hàm callback khi ấn ok của đialof
+                $("#confirmDialog #ok-" + btnid).on("click", function () {
+
+                    if (callbackOk && typeof callbackOk === "function") {
+                        if (isLoading != null && isLoading) {
+                            //$('#loading-indicator').show();
+                        }
+                        callbackOk(btnid);
+                    }
+                    $("#confirmDialog").igDialog("close");
+                });
+            }
+            // assign message
+            $("#confirmDialog .ui-dialog-content").text(message);
+            $("#confirmDialog").igDialog("open");
+        }
+
+        ///
+        /// jQuery
+        ///
+        $(function () {
+            var grid = $("#grid")
+            $("#deleteButton").click(function () {
+                alert("The paragraph was clicked.");
+            });
+            //var key = $("#tbLopChuyenNganh").igCombo("option", "valueKey");
+            //console.log(key)
+            //Delegate
+            //$(document).delegate("#grid", "iggridcolumnscollectionmodified", function aaaaa(evt, ui) {
+            //    console.log(1)
+            //    ui.owner;
+            //});
+
+            $("#saveChanges").igButton({ labelText: $("#saveChanges").val(), disabled: true });
+
+
+            $("#saveChanges").on('igbuttonclick',
+                function (e) {
+                    var grid = $("#grid");
+                    grid.igGrid("saveChanges", function saveSuccess() {
+                        alert("Success")
+                        $("#saveChanges").igButton("option", "disabled", true);
+                    });
+                    return false;
+                }
+            );
+
+            $('#editCheckBox').change(function () {
+                if (!this.checked) {
+                    $("#saveChanges").igButton("option", "disabled", true);
+                    $("#grid").igGridUpdating("option", "editMode", "none");
+                }
+                if (this.checked) {
+                    $("#grid").igGridUpdating("option", "editMode", "row");
+                }
+            });
+
+
+            // when a row ended edit
+            $("#grid").on("iggridupdatingeditrowended", function (evt, ui) {
+                $("#saveChanges").igButton("option", "disabled", false);
+            });
+
+            // when add a row
+            $("#grid").on("iggridupdatingrowadded", function (evt, ui) {
+                $("#saveChanges").igButton("option", "disabled", false);
+            });
+
+
+            $("#grid").igGrid({
+                primaryKey: "id",
+                caption: "Danh sách Giáo Viên",
+                width: '100%',
+                columns: [
+                    {
+                        headerText: "", key: "id", dataType: "number", width: "*", hidden: true
+                    },
+                    {
+                        headerText: "Họ Tên", key: "HoTen", dataType: "string", width: "*"
+                    },
+                    {
+                        headerText: "Ngày Sinh", key: "NgaySinh", dataType: "date", width: "*", format: "dd/MM/yyyy"
+                    },
+                    {
+                        headerText: "Giới Tính", key: "GioiTinh", dataType: "number", width: "*", formatter: (val) => val === 1 ? "Nam" : "Nữ"
+                    },
+                    {
+                        headerText: "Bộ Môn", key: "BoMon_id", dataType: "object", width: "*", 
+                        mapper: function (id) {
+                            return lopChuyenNganhList.filter(word => word.Key == id.BoMon_id.toString())[0].Value;
+                        }
+                    },
+                    {
+                        headerText: "Quê Quán", key: "QueQuan", dataType: "string", width: "*"
+                    },
+                    {
+                        headerText: "Email", key: "Email", dataType: "string", width: "*"
+                    },
+                    //{
+                    //    headerText: "Xã/Phường", key: "PhuongXa", dataType: "string", width: "*"
+                    //},
+                    //{
+                    //    headerText: "Quận/Huyện", key: "QuanHuyen", dataType: "string", width: "*"
+                    //},
+                    //{
+                    //    headerText: "Tỉnh/Thành Phố", key: "TinhThanhPho", dataType: "string", width: "*"
+                    //},
+                    {
+                        headerText: "Điện Thoại Nhà Riêng", key: "DienThoaiNR", dataType: "string", width: "*"
+                    },
+                    {
+                        headerText: "Điện Thoại Di Động", key: "DienThoaiDD", dataType: "string", width: "*"
+                    },
+                    {
+                        headerText: "Action",
+                        key: "action",
+                        dataType: "string",
+                        width: "*",
+                        unbound: true,
+                        template: '<button class="" onClick="View(${id})"><i class="fa fa-eye"></i></button> <button onClick="DeleteRow(${id})" class=""><i class="fa fa-trash"></i></button>'
+                    }
+                ],
+                autofitLastColumn: false,
+                autoGenerateColumns: false,
+                dataSource: data,
+                //updateUrl: "SinhVien/SinhVienSaveData",
+                responseDataKey: "results",
+                autoCommit: true,
+                features: [
+                    {
+                        name: "Sorting",
+                        sortingDialogContainment: "window"
+                    },
+                    {
+                        name: "Filtering",
+                        type: "local"
+                    },
+                    {
+                        name: "Selection"
+                    },
+                    {
+                        name: "Paging",
+                        pageSize: 10
+                    },
+                    {
+                        name: "Resizing"
+                    },
+                    {
+                        name: "Updating",
+                        enableDeleteRow: false,
+                        enableAddRow: false,
+                        columnSettings: [
+                            {
+                                columnKey: "HoTen",
+                                editorType: "text",
+                                required: true
+                            },
+                            {
+                                columnKey: "NgaySinh",
+                                //defaultValue: "Infragistics",
+                                editorType: "datepicker"
+                            },
+                            {
+                                columnKey: "GioiTinh",
+                                editorType: 'combo',
+                                editorOptions: {
+                                    mode: "dropdown",
+                                    dataSource: genderValue,
+                                    textKey: "value",
+                                    valueKey: "ID"
+                                }
+                            },
+                            {
+                                columnKey: "BoMon_id",
+                                editorType: 'combo',
+                                editorOptions: {
+                                    mode: "dropdown",
+                                    dataSource: lopChuyenNganhList,
+                                    textKey: "Value",
+                                    valueKey: "Key"
+                                }
+                            },
+                            //{
+                            //    columnKey: "CMT",
+                            //    editorType: "text"
+                            //},
+                            //{
+                            //    columnKey: "QueQuan",
+                            //    editorType: "text"
+                            //},
+                            // {
+                            //    columnKey: "DiaChi",
+                            //    editorType: "text"
+                            //},
+                            // {
+                            //    columnKey: "Email",
+                            //    editorType: "text"
+                            //},
+                            {
+                                columnKey: "action",
+                                readOnly: true
+                            },
+                        ]
+                    }
+                ]
+            });
+
+            $("#successDialog").igDialog({
+                modal: true,
+                resizable: false,
+                state: "closed",
+                showHeader: true,
+                showFooter: true,
+                footerText: "<button id='ok-close' type='button' class='btn btn-xs btn-success'>OK</button>"
+            });
+
+            $("#successDialog #ok-close").on("click", function () {
+                $("#successDialog").igDialog("close");
+                window.isFreshButton = true;
+                location.reload();
+            });
+        })
+
+
 </script>
+
+}

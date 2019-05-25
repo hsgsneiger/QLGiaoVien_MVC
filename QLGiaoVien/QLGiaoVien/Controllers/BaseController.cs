@@ -14,5 +14,8 @@ namespace QLGiaoVien.Controllers
         protected ResearchBL Research_Service = new ResearchBL();
 
 
+        // toanpn
+        protected LecturerBL lecturer_service = new LecturerBL();
+        protected DepartmentBL department_service = new DepartmentBL();
     }
 }
