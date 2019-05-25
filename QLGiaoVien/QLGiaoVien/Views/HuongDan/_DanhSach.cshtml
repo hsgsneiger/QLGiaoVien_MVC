@@ -34,7 +34,7 @@
                                     <td colspan="4">@Model[i].TenLoaiHuongDan</td>
                                     <td>@Model[i].SoGioDinhMuc</td>
                                     <td></td>
-                                    <td>@Model[i].TongSoGio.ToString("N2")</td>
+                                    <td>@Model[i].TongSoGio.ToString("N0")</td>
                                 </tr>
                                 for (int j = 0; j < Model[i].ChiTiet.Count; j++)
                                 {
@@ -46,13 +46,13 @@
                                         <td>@Model[i].ChiTiet[j].TenDeTai_ChuyenDe</td>
                                         <td></td>
                                         <td>@Model[i].ChiTiet[j].SoCBHD</td>
-                                        <td>@Model[i].ChiTiet[j].SoGio.ToString("N2")</td>
+                                        <td>@Model[i].ChiTiet[j].SoGio.ToString("N0")</td>
                                     </tr>
                                 }
                             }
                             <tr class="bg-gray-500 font-weight-bold">
                                 <td colspan="7">Tổng số</td>
-                                <td>@Model.Sum(x => x.TongSoGio).ToString("N2")</td>
+                                <td>@Model.Sum(x => x.TongSoGio).ToString("N0")</td>
                             </tr>
                         }
 

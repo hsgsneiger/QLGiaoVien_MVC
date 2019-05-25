@@ -9,7 +9,6 @@ namespace DAO
     {
         public double SoGioChuan { get; set; }
         public string TenVaiTro { get; set; }
-        public double TyLeNhan { get; set; }
         public string TenLoai { get; set; }
         public string TenDeTai { get; set; }
         public int SoTacGia { get; set; }

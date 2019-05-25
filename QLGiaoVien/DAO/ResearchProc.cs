@@ -11,9 +11,9 @@ namespace DAO
         public string TenNhomNCKH { get; set; }
         public double SoGioChuan { get; set; }
         public string TenVaiTro { get; set; }
-        public double TyLeNhan { get; set; }
+        public double TyLeLoai { get; set; }
+        public double TyLeVaiTro { get; set; }
         public string TenLoai { get; set; }
-        public double TongSoGio { get; set; }
         public string TenDeTai { get; set; }
         public int SoTacGia { get; set; }
         public int NhomNCKH_id { get; set; }
