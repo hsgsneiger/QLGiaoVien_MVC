@@ -9,7 +9,7 @@ namespace DAO
    public class KhaoThiView
     {
         public string TenLoaiKhaoThi { set; get; }
-        public int TongSoGio { set; get; }
+        public double TongSoGio { set; get; }
         public List<KhaoThiList> chiTiet { set; get; }
     }
 }

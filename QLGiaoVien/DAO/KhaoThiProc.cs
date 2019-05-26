@@ -13,6 +13,6 @@ namespace DAO
         public int SoBai { set; get; }
         public int LoaiKhaoThi_id { set; get; }
         public string TenLoaiKhaoThi { set; get; }
-        public int SoGioQuyDoi{ set; get; }
+        public double SoGioQuyDoi{ set; get; }
     }
 }

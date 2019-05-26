@@ -11,6 +11,6 @@ namespace DAO
         public string TenKhaoThi { set; get; }
         public string TenLop { set; get; }
         public int SoBai { set; get; }
-        public int SoGio { set; get; }
+        public double SoGio { set; get; }
     }
 }
