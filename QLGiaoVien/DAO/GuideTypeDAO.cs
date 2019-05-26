@@ -1,0 +1,13 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace DAO
+{
+    public class GuideTypeDAO
+    {
+        public int id { get; set; }
+        public string TenLoaiHuongDan { get; set; }
+    }
+}

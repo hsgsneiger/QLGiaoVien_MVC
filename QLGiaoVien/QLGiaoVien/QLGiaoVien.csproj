@@ -134,6 +134,7 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\AjaxController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\GiaoVienController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -1814,6 +1815,9 @@
     <Content Include="vendor\jquery\jquery.slim.min.js" />
     <Content Include="vendor\select2\select2.min.css" />
     <Content Include="vendor\select2\select2.min.js" />
+    <Content Include="vendor\toastr\font-awesome.css" />
+    <Content Include="vendor\toastr\toastr.min.css" />
+    <Content Include="vendor\toastr\toastr.min.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -1975,9 +1979,15 @@
     <Content Include="Views\NghienCuu\Index.cshtml" />
     <Content Include="Views\HuongDan\_DanhSach.cshtml" />
     <Content Include="Views\NghienCuu\_DanhSach.cshtml" />
+    <Content Include="Views\HuongDan\ThemMoi.cshtml" />
+    <Content Include="Views\HuongDan\_ChiTiet.cshtml" />
+    <Content Include="Views\HuongDan\_HeHuongDan.cshtml" />
+    <Content Include="Views\NghienCuu\_ChiTiet.cshtml" />
+    <Content Include="Views\NghienCuu\_Loai_VaiTro.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Ajax\" />
     <Folder Include="Views\Base\" />
   </ItemGroup>
   <ItemGroup>
@@ -2001,6 +2011,10 @@
     <ProjectReference Include="..\DAO\DAO.csproj">
       <Project>{c45b3e60-1485-4dfd-818a-a9515908b1be}</Project>
       <Name>DAO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Utils\Utils.csproj">
+      <Project>{0C7546CB-80B7-4448-B4FA-79AB91BF943E}</Project>
+      <Name>Utils</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

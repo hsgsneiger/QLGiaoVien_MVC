@@ -1,0 +1,79 @@
+﻿
+@using DAO
+@model Research_Insert_Update
+@{
+    List<ResearchGroupDAO> lstGroup = (List<ResearchGroupDAO>)ViewBag.lstGroup;
+    List<VaiTro> lstVaiTro = (List<VaiTro>)ViewBag.lstVaiTro;
+    List<ResearchTypeDAO> lstResearchType = (List<ResearchTypeDAO>)ViewBag.lstResearchType;
+
+}
+<form>
+    <div class="row">
+        <div class="col-6">
+            <input type="hidden" value="@Model.id" class="form-control" id="id">
+
+            <div class="form-group">
+                <label for="TenDeTai_ChuyenDe">Tên công trình - khoa học</label>
+                <input type="text" value="@Model.TenDeTai" class="form-control required" id="TenDeTai">
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="form-group">
+                <label for="">Số Tác Giả</label>
+                <input type="number" class="form-control required number" value="@Model.SoTacGia" id="SoTacGia">
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-6">
+            <div class="form-group">
+                <label for="">Số Trang</label>
+                <input type="number" class="form-control" value="@Model.SoTrang" id="SoTrang">
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="form-group">
+                <label for="LoaiHuongDan_id">Nhóm Nghiên Cứu</label>
+                <select class="form-control required" id="NhomNCKH_id">
+                    <option value=""> -- Lựa chọn --</option>
+                    @for (int i = 0; i < lstGroup.Count; i++)
+                    {
+                        <option @if (lstGroup[i].id.Equals(Model.NhomNCKH_id)) { <text> selected</text> } value='@lstGroup[i].id'>@lstGroup[i].TenNhomNCKH</option>
+                    }
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="row " id="NhomNCKH">
+        <div class="col-6">
+            <div class="form-group">
+                <label for="LoaiHuongDan_id">Loại Đề Tài</label>
+                <select class="form-control required" id="LoaiDeTai_id">
+                    @for (int i = 0; i < lstResearchType.Count; i++)
+                    {
+                        <option @if (lstResearchType[i].id.Equals(Model.LoaiDeTai_id)) { <text> selected</text> } value='@lstResearchType[i].id'>@lstResearchType[i].TenLoai</option>
+                    }
+                </select>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="form-group" id="Vai trò">
+                <label for="HeHuongDan_id required">Vai trò</label>
+                <select class="form-control" id="VaiTro_id">
+                    @for (int i = 0; i < lstVaiTro.Count; i++)
+                    {
+                        <option @if (lstVaiTro[i].id.Equals(Model.VaiTro_id)) { <text> selected</text> } value='@lstVaiTro[i].id'>@lstVaiTro[i].TenVaiTro</option>
+                    }
+                </select>
+            </div>
+        </div>
+    </div>
+
+</form>
+<script>
+    $(document).ready(function () {
+        $("#NhomNCKH_id").change(function (event$) {
+            Features.doPost('/NghienCuu/_Loai_VaiTro', { NhomNCKH_id: +event$.target.value }, false, 'NhomNCKH');
+        })
+    })
+</script>

@@ -11,7 +11,7 @@ namespace BusinessLogic
     {
         public List<ResearchView> GetAll(int MaGV, int? NamHoc = null)
         {
-            List<ResearchProc> lstResearch_Proc = new SqlHelper<ResearchProc>().ExecuteProcAndGetData("CTNghienCuu_GetAll", MaGV, MaGV);
+            List<ResearchProc> lstResearch_Proc = new SqlHelper<ResearchProc>().ExecuteProcAndGetData("CTResearch_GetAll", MaGV, MaGV);
             IEnumerable<int> lstId = lstResearch_Proc.Select(x => x.NhomNCKH_id).Distinct();
             List<ResearchView> listResearch_View = new List<ResearchView>();
 
@@ -22,13 +22,29 @@ namespace BusinessLogic
 
                 researchView.TenNhomNCKH = tmp.FirstOrDefault().TenNhomNCKH;
 
-                researchView.ChiTiet = tmp.Select(x => new ResearchDaoForList() { SoGioChuan = x.SoGioChuan * x.TyLeLoai + x.SoGioChuan*x.TyLeVaiTro/x.SoTacGia, SoTacGia = x.SoTacGia, TenDeTai = x.TenDeTai, TenLoai = x.TenLoai, TenVaiTro = x.TenVaiTro}).ToList();
+                researchView.ChiTiet = tmp.Select(x => new ResearchDaoForList() {id=x.id,SoTrang=x.SoTrang, SoGioChuan = x.SoGioChuan * x.TyLeLoai + x.SoGioChuan*x.TyLeVaiTro/x.SoTacGia, SoTacGia = x.SoTacGia, TenDeTai = x.TenDeTai, TenLoai = x.TenLoai, TenVaiTro = x.TenVaiTro}).ToList();
                 researchView.TongSoGio = researchView.ChiTiet.Sum(x=>x.SoGioChuan);
 
                 listResearch_View.Add(researchView);
             }
 
             return listResearch_View;
+        }
+        public bool Insert(Research_Insert_Update obj)
+        {
+            return new SqlHelper<Research_Insert_Update>().ExecuteProc("CTResearch_Insert", obj);
+        }
+        public bool Update(Research_Insert_Update obj)
+        {
+            return new SqlHelper<Research_Insert_Update>().ExecuteProc("CTResearch_Update", obj);
+        }
+        public bool Delete(int ID)
+        {
+            return new SqlHelper<Research_Insert_Update>().ExecuteProc("CTResearch_Delete", "ID", ID);
+        }
+        public List<Research_Insert_Update> GetByID(int ID)
+        {
+            return new SqlHelper<Research_Insert_Update>().ExecuteProcAndGetData("CTResearch_GetByID", "ID", ID);
         }
     }
 }

@@ -2,11 +2,13 @@
 
 <!-- Begin Page Content -->
 <div class="container-fluid">
-
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
-        <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Hướng dẫn</h6>
+        <div class="card-header py-3 row">
+            <h6 class="m-0 font-weight-bold text-primary col-10">Hướng dẫn</h6>
+            <button type="button" class="col-2 btn btn-primary" onclick="Features.doPost('/HuongDan/_ChiTiet', {}, false, 'modal-body');Features.isUpdate=false" data-toggle="modal" data-target="#exampleModal">
+                Thêm mới
+            </button>
         </div>
         <div class="card-body">
             <div class="table-responsive">
@@ -21,7 +23,7 @@
                             <th>Định mức</th>
                             <th>Số CBHĐ</th>
                             <th>Số giờ</th>
-
+                            <th>Thao tác</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -34,7 +36,7 @@
                                     <td colspan="4">@Model[i].TenLoaiHuongDan</td>
                                     <td>@Model[i].SoGioDinhMuc</td>
                                     <td></td>
-                                    <td>@Model[i].TongSoGio.ToString("N0")</td>
+                                    <td colspan="2">@Model[i].TongSoGio.ToString("N0")</td>
                                 </tr>
                                 for (int j = 0; j < Model[i].ChiTiet.Count; j++)
                                 {
@@ -47,12 +49,14 @@
                                         <td></td>
                                         <td>@Model[i].ChiTiet[j].SoCBHD</td>
                                         <td>@Model[i].ChiTiet[j].SoGio.ToString("N0")</td>
+                                        <td><i  data-toggle="modal" data-target="#exampleModal" onclick="Features.doPost('/HuongDan/_ChiTiet', {'ID':@Model[i].ChiTiet[j].id}, false, 'modal-body');Features.isUpdate=true" class="fas fa-edit"></i> / <i onclick="Features.Delete('/Ajax/HuongDan_Xoa', {'ID':@Model[i].ChiTiet[j].id})" class="fas fa-trash"></i></td>
                                     </tr>
                                 }
                             }
                             <tr class="bg-gray-500 font-weight-bold">
                                 <td colspan="7">Tổng số</td>
                                 <td>@Model.Sum(x => x.TongSoGio).ToString("N0")</td>
+                                <td></td>
                             </tr>
                         }
 
@@ -65,3 +69,36 @@
 </div>
 <!-- /.container-fluid -->
 
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Hướng Dẫn</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modal-body">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-primary" onclick="saveChanges()">Lưu</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function saveChanges() {
+        const obj = Features.getValueFromModal();
+        if(!obj) return;
+         obj.MaGV = +$("#GV").val();
+         obj.MaNamHoc = +$("#Nam").val();
+         obj.id = +obj.id;
+         obj.SoCBHD = +obj.SoCBHD;
+         obj.LoaiHuongDan_id = +obj.LoaiHuongDan_id;
+         obj.HeHuongDan_id = +obj.HeHuongDan_id;
+         Features.doPost("/Ajax/HuongDan_ThemSua", { obj: obj ,isUpdate:Features.isUpdate}, true);
+    }
+</script>

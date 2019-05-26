@@ -40,14 +40,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GuideSystemDAO.cs" />
+    <Compile Include="GuideTypeDAO.cs" />
     <Compile Include="GuideProc.cs" />
     <Compile Include="GuideView.cs" />
     <Compile Include="GuideDAOForList.cs" />
+    <Compile Include="Guide_Insert_Update.cs" />
     <Compile Include="LecturerDAO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ResearchDaoForList.cs" />
+    <Compile Include="ResearchGroupDAO.cs" />
     <Compile Include="ResearchProc.cs" />
+    <Compile Include="ResearchTypeDAO.cs" />
     <Compile Include="ResearchView.cs" />
+    <Compile Include="Research_Insert_Update.cs" />
+    <Compile Include="VaiTroDAO.cs" />
     <Compile Include="YearDAO.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

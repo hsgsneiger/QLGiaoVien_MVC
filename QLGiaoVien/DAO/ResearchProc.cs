@@ -17,5 +17,7 @@ namespace DAO
         public string TenDeTai { get; set; }
         public int SoTacGia { get; set; }
         public int NhomNCKH_id { get; set; }
+        public double SoTrang { get; set; }
+
     }
 }

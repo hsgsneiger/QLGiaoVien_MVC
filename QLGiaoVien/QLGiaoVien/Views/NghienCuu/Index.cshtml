@@ -21,10 +21,8 @@
         <div class="form-group">
             <label for="email">Năm:</label>
             <select class="form-control" id="Nam">
-                <option value='null'>Tất cả</option>
-
                 @for (int i = 0; i < lstYears.Count; i++)
-            {
+                {
                     <option value='@lstYears[i].id'>@lstYears[i].TenNamHoc</option>
                 }
             </select>
@@ -42,13 +40,15 @@
 
 </div>
 <script>
+    var urlTb = '/NghienCuu/_DanhSach'
+
     $(document).ready(function () {
         $("#GV,#Nam").select2();
     })
 
     $(".btnSearch").click(function () {
         $.ajax({
-            url: 'NghienCuu/_DanhSach',
+            url: '/NghienCuu/_DanhSach',
             method: "post",
             data: {
                 "MaGV": +$("#GV").val(),
@@ -60,6 +60,6 @@
     })
 
     $(".btnExport").click(function () {
-        Features.exportToExcel('dataTable',$("#GV").text().replace(/[\s]\s/g, ''));
+        Features.exportToExcel('dataTable', document.getElementById('select2-GV-container').innerHTML);
     })
 </script>

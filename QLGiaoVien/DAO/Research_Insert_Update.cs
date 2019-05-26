@@ -5,15 +5,19 @@ using System.Text;
 
 namespace DAO
 {
-    public class ResearchDaoForList
+    public class Research_Insert_Update
     {
         public int id { get; set; }
-        public double SoGioChuan { get; set; }
-        public string TenVaiTro { get; set; }
-        public string TenLoai { get; set; }
         public string TenDeTai { get; set; }
         public int SoTacGia { get; set; }
+        public int LoaiDeTai_id { get;set;}
+        public int VaiTro_id { get; set; }
+        public int NhomNCKH_id { get; set; }
+        public int MaGV { get; set; }
+        public int MaNamHoc { get; set; }
         public double SoTrang { get; set; }
+
+
 
     }
 }

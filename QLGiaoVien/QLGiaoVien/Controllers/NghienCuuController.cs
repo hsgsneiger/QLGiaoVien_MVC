@@ -12,9 +12,8 @@ namespace QLGiaoVien.Controllers
         // GET: NghienCuu
         public ActionResult Index()
         {
-
-            List<LecturerDAO> lstLecturers = SearchInfo_Service.GetAllLecturers();
-            List<YearDAO> lstYears = SearchInfo_Service.GetAllYears();
+            List<LecturerDAO> lstLecturers = Configuration_Service.GetAllLecturers();
+            List<YearDAO> lstYears = Configuration_Service.GetAllYears();
             ViewBag.lstYears = lstYears;
             return View(lstLecturers);
         }
@@ -30,6 +29,54 @@ namespace QLGiaoVien.Controllers
                 throw e;
             }
             return PartialView(list);
+        }
+        public PartialViewResult _ChiTiet(int ID = 0)
+        {
+            List<ResearchGroupDAO> lstGroup = new List<ResearchGroupDAO>();
+
+            List<ResearchTypeDAO> lstResearchType = new List<ResearchTypeDAO>();
+            Research_Insert_Update researchInfo = new Research_Insert_Update();
+            List<VaiTro> lstVaiTro = new List<VaiTro>();
+            try
+            {
+                lstGroup = Configuration_Service.ResearchGroupGetAll();
+                ViewBag.lstGuideType = lstResearchType;
+                if (!ID.Equals(0))
+                {
+                    researchInfo = Research_Service.GetByID(ID).FirstOrDefault();
+                    lstVaiTro = Configuration_Service.VaitroGetAll(researchInfo.NhomNCKH_id);
+                    lstResearchType = Configuration_Service.ResearchTypeGetAll(researchInfo.NhomNCKH_id);
+                }
+                ViewBag.lstResearchType = lstResearchType;
+                ViewBag.lstVaiTro = lstVaiTro;
+                ViewBag.lstGroup = lstGroup;
+
+
+
+
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+            return PartialView(researchInfo);
+        }
+        public PartialViewResult _Loai_VaiTro(int NhomNCKH_id = 0)
+        {
+            List<ResearchTypeDAO> lstResearchType = new List<ResearchTypeDAO>();
+            List<VaiTro> lstVaiTro = new List<VaiTro>();
+            try
+            {
+                lstVaiTro = Configuration_Service.VaitroGetAll(NhomNCKH_id);
+                lstResearchType = Configuration_Service.ResearchTypeGetAll(NhomNCKH_id);
+                ViewBag.lstResearchType = lstResearchType;
+                ViewBag.lstVaiTro = lstVaiTro;
+        }
+            catch (Exception e)
+            {
+                throw e;
+            }
+            return PartialView();
         }
     }
 }

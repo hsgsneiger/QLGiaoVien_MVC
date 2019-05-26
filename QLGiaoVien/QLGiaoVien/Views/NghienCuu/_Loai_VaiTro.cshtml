@@ -1,0 +1,27 @@
+﻿@using DAO
+@{ 
+    List<VaiTro> lstVaiTro = (List<VaiTro>)ViewBag.lstVaiTro;
+    List<ResearchTypeDAO> lstResearchType = (List<ResearchTypeDAO>)ViewBag.lstResearchType;
+}
+<div class="col-6">
+    <div class="form-group">
+        <label for="LoaiHuongDan_id">Loại Đề Tài</label>
+        <select class="form-control required" id="LoaiDeTai_id">
+            @for (int i = 0; i < lstResearchType.Count; i++)
+            {
+                <option value='@lstResearchType[i].id'>@lstResearchType[i].TenLoai</option>
+            }
+        </select>
+    </div>
+</div>
+<div class="col-6">
+    <div class="form-group" id="Vai trò">
+        <label for="HeHuongDan_id required">Vai trò</label>
+        <select class="form-control" id="VaiTro_id">
+            @for (int i = 0; i < lstVaiTro.Count; i++)
+            {
+                <option value='@lstVaiTro[i].id'>@lstVaiTro[i].TenVaiTro</option>
+            }
+        </select>
+    </div>
+</div>

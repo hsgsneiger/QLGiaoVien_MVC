@@ -6,7 +6,8 @@ using System.Text;
 namespace DAO
 {
     public class GuideDAOForList
-    {
+    {   
+        public int id { get; set; }
         public string HoTenHocVien { get; set; }
         public string Lop { get; set; }
         public string TenHeHuongDan { get; set; }

@@ -13,7 +13,7 @@ namespace BusinessLogic
         public List<GuideView> GetAll(int MaGV,int? NamHoc=null)
         {
             List<GuideProc> listGuides = new List<GuideProc>();
-            listGuides = new SqlHelper<GuideProc>().ExecuteProcAndGetData("CTHuongDan_GetAll", MaGV, NamHoc);
+            listGuides = new SqlHelper<GuideProc>().ExecuteProcAndGetData("CTGuide_GetAll", MaGV, NamHoc);
             List<GuideView> lstGuide_View = new List<GuideView>();
             IEnumerable<int> lstID = listGuides.Select(x => x.LoaiHuongDan_id).Distinct();
             foreach(int id in lstID)
@@ -22,12 +22,28 @@ namespace BusinessLogic
                 IEnumerable<GuideProc> tmp = listGuides.Where(x => x.LoaiHuongDan_id.Equals(id));
                 guide_view.TenLoaiHuongDan = tmp.FirstOrDefault().TenLoaiHuongDan;
                 guide_view.SoGioDinhMuc = tmp.FirstOrDefault().SoGioDinhMuc;
-                guide_view.ChiTiet = tmp.Select(x => new GuideDAOForList() { HoTenHocVien = x.HoTenHocVien, Lop = x.Lop, SoCBHD = x.SoCBHD, TenHeHuongDan = x.TenHeHuongDan,SoGio = guide_view.SoGioDinhMuc/x.SoCBHD, TenDeTai_ChuyenDe=x.TenDeTai_ChuyenDe }).ToList();
+                guide_view.ChiTiet = tmp.Select(x => new GuideDAOForList() {id=x.id, HoTenHocVien = x.HoTenHocVien, Lop = x.Lop, SoCBHD = x.SoCBHD, TenHeHuongDan = x.TenHeHuongDan,SoGio = guide_view.SoGioDinhMuc/x.SoCBHD, TenDeTai_ChuyenDe=x.TenDeTai_ChuyenDe }).ToList();
                 guide_view.TongSoGio = guide_view.ChiTiet.Sum(x => x.SoGio);
                 lstGuide_View.Add(guide_view);
 
             }
             return lstGuide_View;
+        }
+        public List<Guide_Insert_Update> GetByID(int id)
+        {
+            return new SqlHelper<Guide_Insert_Update>().ExecuteProcAndGetData("CTGuide_GetByID", "id", id);
+        }
+        public bool Insert(Guide_Insert_Update obj)
+        {
+            return new SqlHelper<Guide_Insert_Update>().ExecuteProc("CTGuide_Insert",obj);
+        }
+        public bool Update(Guide_Insert_Update obj)
+        {
+            return new SqlHelper<Guide_Insert_Update>().ExecuteProc("CTGuide_Update", obj);
+        }
+        public bool Delete(int ID)
+        {
+            return new SqlHelper<Guide_Insert_Update>().ExecuteProc("CTGuide_Delete", "ID",ID);
         }
     }
 }

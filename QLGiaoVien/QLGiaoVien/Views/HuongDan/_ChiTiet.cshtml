@@ -1,0 +1,72 @@
+﻿@using DAO
+@model Guide_Insert_Update
+@{ 
+    List<GuideTypeDAO> lstGuideType = (List<DAO.GuideTypeDAO>)ViewBag.lstGuideType;
+    List<GuideSystemDAO> lstGuideSystem = (List<GuideSystemDAO>)ViewBag.lstGuideSystem;
+
+}
+<form>
+    <div class="row">
+        <div class="col-6">
+            <input type="hidden" value="@Model.id" class="form-control" id="id">
+
+            <div class="form-group">
+                <label for="TenDeTai_ChuyenDe">Tên Đề Tài - Chuyên đề</label>
+                <input type="text" value="@Model.TenDeTai_ChuyenDe" class="form-control required" id="TenDeTai_ChuyenDe">
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="form-group">
+                <label for="">Số Cán Bộ Hướng Dẫn</label>
+                <input type="number" class="form-control required number" value="@Model.SoCBHD" id="SoCBHD">
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-6">
+            <div class="form-group">
+                <label for="HoTenHocVien">Họ tên học viên</label>
+                <input type="text" id="HoTenHocVien" value="@Model.HoTenHocVien" class="form-control required">
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="form-group">
+                <label for="Lop">Lớp</label>
+                <input type="text" class="form-control required" value="@Model.Lop" id="Lop">
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-6">
+            <div class="form-group">
+                <label for="LoaiHuongDan_id">Loại Hướng Dẫn</label>
+                <select class="form-control required" id="LoaiHuongDan_id">
+                    <option value=""> -- Lựa chọn --</option>
+                    @for (int i = 0; i < lstGuideType.Count; i++)
+                    {
+                        <option @if (lstGuideType[i].id.Equals(Model.LoaiHuongDan_id)) {<text>selected</text> } value='@lstGuideType[i].id'>@lstGuideType[i].TenLoaiHuongDan</option>
+                    }
+                </select>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="form-group" id="HeHuongDan">
+                <label for="HeHuongDan_id required">Hệ Hướng Dẫn</label>
+                <select class="form-control" id="HeHuongDan_id">
+                    @for (int i = 0; i < lstGuideSystem.Count; i++)
+                    {
+                        <option @if (lstGuideSystem[i].id.Equals(Model.HeHuongDan_id)) { <text> selected</text> } value='@lstGuideSystem[i].id'>@lstGuideSystem[i].TenHeHuongDan</option>
+                    }
+                </select>
+            </div>
+        </div>
+    </div>
+
+</form>
+<script>
+    $(document).ready(function () {
+        $("#LoaiHuongDan_id").change(function(event$) {
+            Features.doPost('/HuongDan/_HeHuongDan', { LoaiHuongDan_id : +event$.target.value}, false, 'HeHuongDan')
+        })
+    })
+</script>
