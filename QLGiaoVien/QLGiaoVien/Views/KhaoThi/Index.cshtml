@@ -1,9 +1,10 @@
-﻿@model  List<DAO.LecturerDAO>
+﻿@model List<DAO.LecturerDAO>
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    List<DAO.YearDAO> lstYears = (List<DAO.YearDAO>)ViewBag.lstYears;
+    List<DAO.YearDAO> dsNam = (List<DAO.YearDAO>)ViewBag.dsNam;
 }
+
 
 <div class="row">
     <div class="col-5">
@@ -19,24 +20,24 @@
     </div>
     <div class="col-5">
         <div class="form-group">
-        <label for="email">Năm:</label>
-        <select class="form-control" id="Nam">
-            <option value='null'>Tất cả</option>
+            <label for="email">Năm:</label>
+            <select class="form-control" id="Nam">
+                <option value='null'>Tất cả</option>
 
-             @*@for (int i = 0; i < lstYears.Count; i++)
-            {
-                <option value='@lstYears[i].id'>@lstYears[i].TenNamHoc</option>
-            }*@
-        </select>
+                @*@for (int i = 0; i < lstYears.Count; i++)
+                    {
+                        <option value='@lstYears[i].id'>@lstYears[i].TenNamHoc</option>
+                  }*@
+            </select>
+        </div>
     </div>
-</div>
     <div class="col-2 mt-4">
         <button class="btn btn-primary btnSearch">Tìm kiếm</button>
     </div>
 </div>
 <div class="d-flex justify-content-end pr-5 mb-2">
     <button class="btn btn-danger btnExport">Export to Excel</button>
-    
+
 </div>
 <div id="data-table">
 
@@ -48,11 +49,11 @@
 
     $(".btnSearch").click(function () {
         $.ajax({
-            url: 'HuongDan/_DanhSach',
+            url: 'KhaoThi/_DanhSachKhaoThi',
             method: "post",
             data: {
                 "MaGV": +$("#GV").val(),
-                "MaNamHoc":+$("#Nam").val()
+                "MaNamHoc": +$("#Nam").val()
             }
         }).done(function (result) {
             $("#data-table").html(result);
@@ -63,3 +64,4 @@
         Features.exportToExcel('dataTable',$("#GV").text().replace(/[\s]\s/g, ''));
     })
 </script>
+

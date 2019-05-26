@@ -12,7 +12,6 @@ namespace QLGiaoVien.Controllers
         protected GuideBL HuongDan_Service = new GuideBL();
         protected SearchInfoBL SearchInfo_Service = new SearchInfoBL();
         protected ResearchBL Research_Service = new ResearchBL();
-
-
+        protected KhaoThiBL KhaoThi_Service = new KhaoThiBL();
     }
 }

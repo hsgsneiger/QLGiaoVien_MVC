@@ -43,6 +43,9 @@
     <Compile Include="GuideProc.cs" />
     <Compile Include="GuideView.cs" />
     <Compile Include="GuideDAOForList.cs" />
+    <Compile Include="KhaoThiList.cs" />
+    <Compile Include="KhaoThiProc.cs" />
+    <Compile Include="KhaoThiView.cs" />
     <Compile Include="LecturerDAO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ResearchDaoForList.cs" />

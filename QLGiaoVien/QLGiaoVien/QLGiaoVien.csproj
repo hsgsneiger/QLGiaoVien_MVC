@@ -138,6 +138,7 @@
     <Compile Include="Controllers\GiaoVienController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\HuongDanController.cs" />
+    <Compile Include="Controllers\KhaoThiController.cs" />
     <Compile Include="Controllers\NghienCuuController.cs" />
     <Compile Include="Repository\DBConnectionBase.cs" />
     <Compile Include="Global.asax.cs">
@@ -1975,6 +1976,8 @@
     <Content Include="Views\NghienCuu\Index.cshtml" />
     <Content Include="Views\HuongDan\_DanhSach.cshtml" />
     <Content Include="Views\NghienCuu\_DanhSach.cshtml" />
+    <Content Include="Views\KhaoThi\Index.cshtml" />
+    <Content Include="Views\KhaoThi\_DanhSachKhaoThi.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
