@@ -1,0 +1,157 @@
+﻿@using Newtonsoft.Json
+@model List<DAO.TeachTableView>
+<link href="http://cdn-na.infragistics.com/igniteui/2019.1/latest/css/themes/infragistics/infragistics.theme.css" rel="stylesheet" />
+<link href="http://cdn-na.infragistics.com/igniteui/2019.1/latest/css/structure/infragistics.css" rel="stylesheet" />
+
+<script src="http://ajax.aspnetcdn.com/ajax/modernizr/modernizr-2.8.3.js"></script>
+<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+<script src="http://code.jquery.com/ui/1.11.1/jquery-ui.min.js"></script>
+
+<!-- Ignite UI Required Combined JavaScript Files -->
+<script src="http://cdn-na.infragistics.com/igniteui/2019.1/latest/js/infragistics.core.js"></script>
+<script src="http://cdn-na.infragistics.com/igniteui/2019.1/latest/js/infragistics.lob.js"></script>
+
+<table id="grid1"></table>
+<table id="grid2"></table>
+<table id="grid3"></table>
+<table id="grid4"></table>
+
+<!--Sample JSON Data-->
+
+<script type="text/javascript">
+    var x;
+     var lastOpenConfirmDialog = "";
+        // lấy data từ model
+    var data = @(Html.Raw(JsonConvert.SerializeObject(Model.ToList())));
+    console.log(data)
+    var lstLoaiSiSo = @(Html.Raw(JsonConvert.SerializeObject(ViewBag.lstClassSize)));
+
+    function getNhomDG(id) {
+        return lstLoaiSiSo.filter(x => x.NhomGiangDay_id == id);
+    }
+
+    function LoaiSiSoMapper(record) {
+        return getNhomDG(record.NhomGiangDay_id).find(x => x.id == record.LoaiSiSo_id).TenLoaiSiSo;
+    }
+    $(document).on("ighierarchicalgridrowexpanding", "#grid2", function (evt, ui) {
+        x = lstLoaiSiSo;
+    });
+
+    $(function () {
+
+
+        /*----------------- Instantiation -------------------------*/
+        $("#grid2").igHierarchicalGrid({
+            features: [
+                {
+                    name: "Responsive",
+                    enableVerticalRendering: false
+                },
+                {
+                    name: "Updating",
+                    enableAddRow: false,
+                    enableDeleteRow: false,
+                    editMode: "none",
+                    columnSettings:
+                        [
+                            {
+                                columnKey: "id",
+                                required: true
+                            }
+                        ]
+                }
+            ],
+            width: "100%",
+            autoCommit: true,
+            dataSource: data,
+            dataSourceType: "json",
+            responseDataKey: "results",
+            primaryKey: "NhomGiangDay_id",
+            autoGenerateColumns: false,
+            columns: [
+                { key: "NhomGiangDay_id", headerText: "Employee ID", dataType: "number", width: "0%", hidden: true },
+                { key: "TenLoaiGiangDay", headerText: "Loại Giảng Dạy", dataType: "string", width: "*" },
+                { key: "TongSoTC", headerText: "Tổng Số Tín Chỉ", dataType: "string", width: "*" },
+                { key: "TongSoTiet", headerText: "Tổng số tiết", dataType: "string", width: "*" },
+                { key: "TongGioChuan", headerText: "Số Giờ Chuẩn", dataType: "string", width: "*" }
+            ],
+            autofitLastColumn: false,
+            childrenDataProperty: "lstGiangDay",
+            autoGenerateLayouts: false,
+            //defaultChildrenDataProperty: "childLayout",
+            columnLayouts: [
+                {
+                    key: "lstGiangDay",
+                    width: "100%",
+                    autoGenerateColumns: true,
+                    autofitLastColumn: false,
+                    primaryKey: "id",
+                    //autoCommit: true,
+                    columns: [
+                        { key: "id", headerText: "", dataType: "number", width: "0%", hidden: true },
+                        { key: "NamHoc", headerText: "", dataType: "number", width: "0%", hidden: true },
+                        { key: "ThoiGian", headerText: "", dataType: "number", width: "0%", hidden: true },
+                        { key: "NamHoc_id", headerText: "", dataType: "number", width: "0%", hidden: true },
+                        { key: "NhomGiangDay_id", headerText: "", dataType: "number", width: "0%", hidden: true },
+                        { key: "TenHocPhan", headerText: "Tên Học Phần", dataType: "string", width: "*" },
+                        { key: "LoaiSiSo_id", headerText: "Sĩ số", dataType: "object", width: "*", mapper: LoaiSiSoMapper},
+                        { key: "HeGiangDay_id", headerText: "Hệ", dataType: "string", width: "*" },
+                        { key: "Lop", headerText: "Lớp", dataType: "string", width: "*" },
+                        { key: "SoTC", headerText: "Số tín chỉ", dataType: "string", width: "*" },
+                        { key: "SoTiet", headerText: "Số Tiết", dataType: "string", width: "*" },
+                        { key: "GioChuan", headerText: "Số Giờ Chuẩn", dataType: "string", width: "*" },
+                        { key: "GhiChu", headerText: "Ghi chú", dataType: "string", width: "*" }
+                    ],
+                    features: [
+                        {
+                            name: "Responsive",
+                           // enableVerticalRendering: true,
+                            //columnSettings: [
+                            //    {
+                            //        columnKey: "ShipAddress",
+                            //        classes: "ui-hidden-phone"
+                            //    },
+                            //    {
+                            //        columnKey: "ShipCity",
+                            //        classes: "ui-hidden-phone"
+                            //    }
+                            //]
+                        },
+                        //{
+                        //    name: "Paging",
+                        //    pageSize: 10
+                        //},
+                        {
+                            name: "Updating",
+                            enableAddRow: true,
+                            enableDeleteRow: true,
+                            editMode: "row",
+                            rowEditDialogOptions: {
+                                height: "350px",
+                                width: "390px",
+                                containment: "window",
+                                showDoneCancelButtons: true
+                            },
+                            columnSettings: [
+                                {
+                                    columnKey: "id",
+                                    required: true
+                                },
+                                {
+                                    columnKey: "LoaiSiSo_id",
+                                    editorType: "combo",
+                                    editorOptions: {
+                                        dataSource: data,
+                                        textKey: "TenLoaiGiangDay",
+                                        valueKey: "NhomGiangDay_id",
+                                        mode: "dropdown"
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        });
+    });
+</script>

@@ -15,5 +15,10 @@ namespace BusinessLogic
            
             return lstLecturers;
         }
+
+        public bool InsertLecturer(Lecturer_DAO1 lec)
+        {
+            return new SqlHelper<Lecturer_DAO1>().ExecuteProc("InsertLecturer", lec, false);
+        }
     }
 }

@@ -1,0 +1,64 @@
+﻿@model  List<DAO.Lecturer_DAO1>
+@{
+    ViewBag.Title = "Xem tải giảng dạy";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    List<DAO.YearDAO> lstYears = (List<DAO.YearDAO>)ViewBag.lstYears;
+}
+
+<div class="row">
+    <div class="col-5">
+        <div class="form-group">
+            <label for="email">Giáo viên:</label>
+            <select class="form-control" id="GV">
+                @for (int i = 0; i < Model.Count; i++)
+                {
+                    <option value='@Model[i].id'>@Model[i].HoTen</option>
+                }
+            </select>
+        </div>
+    </div>
+    <div class="col-5">
+        <div class="form-group">
+            <label for="email">Năm:</label>
+            <select class="form-control" id="Nam">
+                <option value='null'>Tất cả</option>
+
+                @for (int i = 0; i < lstYears.Count; i++)
+                {
+                    <option value='@lstYears[i].id'>@lstYears[i].TenNamHoc</option>
+                }
+            </select>
+        </div>
+    </div>
+    <div class="col-2 mt-4">
+        <button class="btn btn-primary btnSearch">Tìm kiếm</button>
+    </div>
+</div>
+<div id="data-tabler">
+
+</div>
+
+<script>
+    $(function () {
+        $(document).ready(function () {
+            $("#GV,#Nam").select2();
+        })
+
+        $(".btnSearch").click(function () {
+            $.ajax({
+                url: 'GiangDay/DataGrid',
+                method: "post",
+                data: {
+                    "MaGV": +$("#GV").val(),
+                    "MaNamHoc": +$("#Nam").val()
+                }
+            }).done(function (result) {
+                $("#data-tabler").html(result);
+            })
+        })
+
+        //$(".btnExport").click(function () {
+        //    Features.exportToExcel('dataTable', $("#GV").text().replace(/[\s]\s/g, ''));
+        //})
+    })
+</script>
