@@ -4,7 +4,10 @@ class Features {
     static exportToExcel(tableID,lecturesName) {
         const dataType = 'data:application/vnd.ms-excel,%EF%BB%BF';
         let tableSelect = document.getElementById(tableID);
-
+        if (!tableSelect) {
+            alert('Dữ liệu trống!')
+            return;
+        }
         let dataExport = `<tr>Giáo viên: ${lecturesName.toUpperCase()}</tr><table border='2px'><tr bgcolor='#4BACC6'>${tableSelect.rows[0].innerHTML.replace(/(<th>Thao tác<\/th>)/, '')}</tr>`;
         debugger
         for (let i = 1; i < tableSelect.rows.length; i++) {
