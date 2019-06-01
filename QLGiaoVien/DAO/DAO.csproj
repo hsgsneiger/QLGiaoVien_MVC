@@ -43,6 +43,9 @@
     <Compile Include="GuideProc.cs" />
     <Compile Include="GuideView.cs" />
     <Compile Include="GuideDAOForList.cs" />
+    <Compile Include="HoiDongList.cs" />
+    <Compile Include="HoiDongProc.cs" />
+    <Compile Include="HoiDongView.cs" />
     <Compile Include="KhaoThiList.cs" />
     <Compile Include="KhaoThiProc.cs" />
     <Compile Include="KhaoThiView.cs" />

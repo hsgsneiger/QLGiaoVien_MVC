@@ -14,5 +14,6 @@ namespace DAO
         public int LoaiKhaoThi_id { set; get; }
         public string TenLoaiKhaoThi { set; get; }
         public double SoGioQuyDoi{ set; get; }
+        public double TiLeQuyDoi { set; get; }
     }
 }

@@ -4,8 +4,6 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
     List<DAO.YearDAO> dsNam = (List<DAO.YearDAO>)ViewBag.dsNam;
 }
-
-
 <div class="row">
     <div class="col-5">
         <div class="form-group">
@@ -23,11 +21,10 @@
             <label for="email">Năm:</label>
             <select class="form-control" id="Nam">
                 <option value='null'>Tất cả</option>
-                @*@for (int i = 0; i < lstYears.Count; i++)
-                    {
-                        <option value='@lstYears[i].id'>@lstYears[i].TenNamHoc</option>
-                  }*@
-
+                @for (int i = 0; i < dsNam.Count; i++)
+                {
+                    <option value='@dsNam[i].id'>@dsNam[i].TenNamHoc</option>
+                }
             </select>
         </div>
     </div>
@@ -49,11 +46,11 @@
 
     $(".btnSearch").click(function () {
         $.ajax({
-            url: 'KhaoThi/_DanhSachKhaoThi',
+            url: 'HoiDong/_DanhSachHoiDong',
             method: "post",
             data: {
                 "MaGV": +$("#GV").val(),
-                "MaNamHoc":+$("#Nam").val()
+                "NamHoc": +$("#Nam").val()
             }
         }).done(function (result) {
             $("#data-table").html(result);
@@ -61,7 +58,6 @@
     })
 
     $(".btnExport").click(function () {
-        Features.exportToExcel('dataTable',$("#GV").text().replace(/[\s]\s/g, ''));
+        Features.exportToExcel('dataTable', $("#GV").text().replace(/[\s]\s/g, ''));
     })
 </script>
-
