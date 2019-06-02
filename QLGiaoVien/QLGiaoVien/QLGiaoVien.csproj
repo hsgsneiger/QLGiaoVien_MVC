@@ -137,8 +137,10 @@
     <Compile Include="Controllers\AjaxController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\GiaoVienController.cs" />
+    <Compile Include="Controllers\HoiDongController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\HuongDanController.cs" />
+    <Compile Include="Controllers\KhaoThiController.cs" />
     <Compile Include="Controllers\NghienCuuController.cs" />
     <Compile Include="Repository\DBConnectionBase.cs" />
     <Compile Include="Global.asax.cs">
@@ -1984,6 +1986,10 @@
     <Content Include="Views\HuongDan\_HeHuongDan.cshtml" />
     <Content Include="Views\NghienCuu\_ChiTiet.cshtml" />
     <Content Include="Views\NghienCuu\_Loai_VaiTro.cshtml" />
+    <Content Include="Views\KhaoThi\Index.cshtml" />
+    <Content Include="Views\KhaoThi\_DanhSachKhaoThi.cshtml" />
+    <Content Include="Views\HoiDong\Index.cshtml" />
+    <Content Include="Views\HoiDong\_DanhSachHoiDong.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

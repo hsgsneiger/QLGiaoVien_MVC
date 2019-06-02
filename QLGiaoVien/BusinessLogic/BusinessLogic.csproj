@@ -40,6 +40,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GuideBL.cs" />
+    <Compile Include="HoiDongBL.cs" />
+    <Compile Include="KhaoThiBL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ResearchBL.cs" />
     <Compile Include="ConfigurationBL.cs" />
