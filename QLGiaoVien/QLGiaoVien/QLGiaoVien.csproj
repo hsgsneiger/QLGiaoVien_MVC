@@ -1990,6 +1990,9 @@
     <Content Include="Views\KhaoThi\_DanhSachKhaoThi.cshtml" />
     <Content Include="Views\HoiDong\Index.cshtml" />
     <Content Include="Views\HoiDong\_DanhSachHoiDong.cshtml" />
+    <Content Include="Views\KhaoThi\_ChiTietKhaoThi.cshtml" />
+    <Content Include="Views\HoiDong\_ChiTietHoiDong.cshtml" />
+    <Content Include="Views\HoiDong\_MucThamGia.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

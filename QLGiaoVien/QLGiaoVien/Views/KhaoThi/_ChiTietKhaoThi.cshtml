@@ -1,0 +1,47 @@
+﻿@using DAO
+@model KhaoThi_Insert_Update
+@{
+    List<KhaoThi_LoaiKT> lstLKT = (List<KhaoThi_LoaiKT>)ViewBag.lstLKT;
+}
+<form>
+    <div class="row">
+        <div class="col-6">
+            <input type="hidden" value="@Model.id" class="form-control" id="id">
+
+            <div class="form-group">
+                <label for="TenKhaoThi">Học Phần</label>
+                <input type="text" value="@Model.TenKhaoThi" class="form-control required" id="TenKhaoThi">
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="form-group">
+                <label for="TenLop">Tên Lớp</label>
+                <input type="text" class="form-control required" value="@Model.TenLop" id="TenLop">
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-6">
+            <div class="form-group">
+                <label for="SoBai">Số Bài</label>
+                <input type="number" class="form-control required number" value="@Model.SoBai" id="SoBai">
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-6">
+            <div class="form-group">
+                <label for="LoaiKhaoThi_id">Loại Khảo Thí</label>
+                <select class="form-control required" id="LoaiKhaoThi_id">
+                    <option value=""> -- Lựa chọn --</option>
+                    @for (int i = 0; i < lstLKT.Count; i++)
+                    {
+                        <option @if (lstLKT[i].id.Equals(Model.LoaiKhaoThi_id)) { <text> selected</text> } value='@lstLKT[i].id'>@lstLKT[i].TenLoaiKhaoThi</option>
+                    }
+                </select>
+            </div>
+        </div>        
+    </div>
+
+</form>
+

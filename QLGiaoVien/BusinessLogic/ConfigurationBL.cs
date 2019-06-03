@@ -26,6 +26,7 @@ namespace BusinessLogic
         {
             return new SqlHelper<GuideSystemDAO>().ExecuteProcAndGetData("CTGuideSystem_GetAllByGuideType", "LoaiHuongDan_id", LoaiHuongDan_id);
         }
+
         public List<ResearchGroupDAO> ResearchGroupGetAll()
         {
             return new SqlHelper<ResearchGroupDAO>().ExecuteProcAndGetData("CTResearchGroup_GetAll");
@@ -37,6 +38,18 @@ namespace BusinessLogic
         public List<ResearchTypeDAO> ResearchTypeGetAll(int ID)
         {
             return new SqlHelper<ResearchTypeDAO>().ExecuteProcAndGetData("CTResearchType_GetAll","ID",ID);
+        }
+        public List<KhaoThi_LoaiKT> LoaiKhaoThi_GetAll()
+        {
+            return new SqlHelper<KhaoThi_LoaiKT>().ExecuteProcAndGetData("LoaiKhaoThi_GetAll");
+        }
+        public List<HoiDong_LHD> LoaiHoiDong_GetAll()
+        {
+            return new SqlHelper<HoiDong_LHD>().ExecuteProcAndGetData("LoaiHoiDong_GetAll");
+        }
+        public List<HoiDong_MTG> MucThamGia_GetBy(int LoaiHoiDong_id)
+        {
+            return new SqlHelper<HoiDong_MTG>().ExecuteProcAndGetData("MucThamGia_GetAllBy","LoaiHoiDong_id",LoaiHoiDong_id);
         }
     }
 }

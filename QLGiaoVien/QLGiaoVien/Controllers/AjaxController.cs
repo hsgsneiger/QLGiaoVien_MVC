@@ -128,5 +128,121 @@ namespace QLGiaoVien.Controllers
             }
             return Json(result);
         }
+        public JsonResult KhaoThi_ThemSua(KhaoThi_Insert_Update obj, bool isUpdate)
+        {
+            AjaxResultModel result = new AjaxResultModel();
+            bool check = false;
+            try
+            {
+                if (isUpdate)
+                {
+                    check = KhaoThi_Service.Update(obj);
+
+                }
+                else
+                {
+                    check = KhaoThi_Service.Insert(obj);
+                }
+                if (check)
+                {
+                    result.Code = 0;
+                    result.Message = "Thành công";
+                }
+                else
+                {
+                    result.Code = 1;
+                    result.Message = "Đã có lỗi xảy ra.";
+                }
+            }
+            catch (Exception e)
+            {
+                result.Code = 2;
+                result.Message = e.Message;
+            }
+            return Json(result);
+        }
+        public JsonResult KhaoThi_Xoa(int ID)
+        {
+            AjaxResultModel result = new AjaxResultModel();
+            bool check = false;
+            try
+            {
+                check = KhaoThi_Service.Delete(ID);
+                if (check)
+                {
+                    result.Code = 0;
+                    result.Message = "Thành công";
+                }
+                else
+                {
+                    result.Code = 1;
+                    result.Message = "Đã có lỗi xảy ra.";
+                }
+            }
+            catch (Exception e)
+            {
+                result.Code = 2;
+                result.Message = e.Message;
+            }
+            return Json(result);
+        }
+        public JsonResult HoiDong_ThemSua(HoiDong_Insert_Update obj, bool isUpdate)
+        {
+            AjaxResultModel result = new AjaxResultModel();
+            bool check = false;
+            try
+            {
+                if (isUpdate)
+                {
+                    check = Hoidong_Service.Update(obj);
+
+                }
+                else
+                {
+                    check = Hoidong_Service.Insert(obj);
+                }
+                if (check)
+                {
+                    result.Code = 0;
+                    result.Message = "Thành công";
+                }
+                else
+                {
+                    result.Code = 1;
+                    result.Message = "Đã có lỗi xảy ra.";
+                }
+            }
+            catch (Exception e)
+            {
+                result.Code = 2;
+                result.Message = e.Message;
+            }
+            return Json(result);
+        }
+        public JsonResult HoiDong_Xoa(int ID)
+        {
+            AjaxResultModel result = new AjaxResultModel();
+            bool check = false;
+            try
+            {
+                check = Hoidong_Service.Delete(ID);
+                if (check)
+                {
+                    result.Code = 0;
+                    result.Message = "Thành công";
+                }
+                else
+                {
+                    result.Code = 1;
+                    result.Message = "Đã có lỗi xảy ra.";
+                }
+            }
+            catch (Exception e)
+            {
+                result.Code = 2;
+                result.Message = e.Message;
+            }
+            return Json(result);
+        }
     }
 }

@@ -6,12 +6,14 @@ using System.Text;
 
 namespace DAO
 {
-    public class KhaoThiList
+    public class KhaoThi_Insert_Update
     {
         public int id { set; get; }
         public string TenKhaoThi { set; get; }
-        public string TenLop { set; get; }
         public int SoBai { set; get; }
-        public double SoGio { set; get; }
+        public int LoaiKhaoThi_id { set; get; }
+        public string TenLop { set; get; }
+        public int MaGV { set; get; }
+        public int MaNamHoc { set; get; }
     }
 }

@@ -49,9 +49,14 @@
     <Compile Include="HoiDongList.cs" />
     <Compile Include="HoiDongProc.cs" />
     <Compile Include="HoiDongView.cs" />
+    <Compile Include="HoiDong_Insert_Update.cs" />
+    <Compile Include="HoiDong_LHD.cs" />
+    <Compile Include="HoiDong_MTG.cs" />
     <Compile Include="KhaoThiList.cs" />
     <Compile Include="KhaoThiProc.cs" />
     <Compile Include="KhaoThiView.cs" />
+    <Compile Include="KhaoThi_Insert_Update.cs" />
+    <Compile Include="KhaoThi_LoaiKT.cs" />
     <Compile Include="LecturerDAO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ResearchDaoForList.cs" />

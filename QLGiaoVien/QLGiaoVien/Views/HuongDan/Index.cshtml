@@ -21,9 +21,7 @@
         <div class="form-group">
         <label for="email">Năm:</label>
         <select class="form-control" id="Nam">
-            @for (int i = 0; i < lstYears.Count; i++)
             <option value='null'>Tất cả</option>
-
             @for (int i = 0; i < lstYears.Count; i++)
             {
                 <option value='@lstYears[i].id'>@lstYears[i].TenNamHoc</option>

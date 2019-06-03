@@ -12,8 +12,8 @@ namespace QLGiaoVien.Controllers
         // GET: KhaoThi
         public ActionResult Index(int MaGV = 0, int MaNamHoc= 0)
         {
-            List<LecturerDAO> dsGV = SearchInfo_Service.GetAllLecturers();
-            List<YearDAO> dsNam = SearchInfo_Service.GetAllYears();
+            List<LecturerDAO> dsGV = Configuration_Service.GetAllLecturers();
+            List<YearDAO> dsNam = Configuration_Service.GetAllYears();
             ViewBag.dsNam = dsNam;
             return View(dsGV);
         }
@@ -31,6 +31,27 @@ namespace QLGiaoVien.Controllers
             }
 
             return PartialView(lstKhaoThi);
+        }
+
+        public PartialViewResult _ChiTietKhaoThi(int ID = 0)
+        {
+            List<KhaoThi_LoaiKT> lstLKT = new List<KhaoThi_LoaiKT>();
+            KhaoThi_Insert_Update KhaoThiInfo = new KhaoThi_Insert_Update();
+            try
+            {
+                if (!ID.Equals(0))
+                {
+                    KhaoThiInfo = KhaoThi_Service.GetByID(ID).FirstOrDefault();                                   
+                }
+                lstLKT = Configuration_Service.LoaiKhaoThi_GetAll();
+                ViewBag.lstLKT = lstLKT;
+            }
+            catch(Exception e)
+            {
+                throw e;
+            }
+
+            return PartialView(KhaoThiInfo);
         }
     }
 }

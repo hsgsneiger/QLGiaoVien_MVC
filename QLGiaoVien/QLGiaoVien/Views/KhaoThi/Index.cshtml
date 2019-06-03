@@ -23,10 +23,10 @@
             <label for="email">Năm:</label>
             <select class="form-control" id="Nam">
                 <option value='null'>Tất cả</option>
-                @*@for (int i = 0; i < lstYears.Count; i++)
+                @for (int i = 0; i < dsNam.Count; i++)
                     {
-                        <option value='@lstYears[i].id'>@lstYears[i].TenNamHoc</option>
-                  }*@
+                        <option value='@dsNam[i].id'>Năm Học @dsNam[i].TenNamHoc</option>
+                  }
 
             </select>
         </div>
@@ -43,6 +43,7 @@
 
 </div>
 <script>
+    var urlTb = '/KhaoThi/_DanhSachKhaoThi'
     $(document).ready(function () {
         $("#GV,#Nam").select2();
     })

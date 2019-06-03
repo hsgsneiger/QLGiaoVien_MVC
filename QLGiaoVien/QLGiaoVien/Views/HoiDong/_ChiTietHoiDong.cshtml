@@ -1,0 +1,59 @@
+﻿@using DAO
+@model HoiDong_Insert_Update
+@{
+    List<HoiDong_LHD> lstLHD = (List<HoiDong_LHD>)ViewBag.lstLHD;
+    List<HoiDong_MTG> lstMTG = (List<HoiDong_MTG>)ViewBag.lstMTG;
+}
+<form>
+    <div class="row">
+        <div class="col-6">
+            <input type="hidden" value="@Model.id" class="form-control" id="id">
+            <div class="form-group">
+                <label for="TenHoiDong">Hội Đồng</label>
+                <input type="text" value="@Model.TenHoiDong" class="form-control required" id="TenHoiDong">
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-6">
+            <div class="form-group">
+                <label for="SoBai">Số Bài</label>
+                <input type="number" class="form-control required number" value="@Model.SoLuong" id="SoLuong">
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-6">
+            <div class="form-group">
+                <label for="LoaiHoiDong">Loại Hội Đồng</label>
+                <select class="form-control required" id="LoaiHoiDong_id">
+                    <option value=""> -- Lựa chọn --</option>
+                    @for (int i = 0; i < lstLHD.Count; i++)
+                    {
+                        <option @if (lstLHD[i].id.Equals(Model.LoaiHoiDong_id)) { <text> selected</text> } value='@lstLHD[i].id'>@lstLHD[i].TenLoaiHoiDong</option>
+                    }
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="MucThamGia">Mức Tham Gia</label>
+            <select class="form-control required" id="MucThamGia_id">
+                <option value=""> -- Lựa chọn --</option>
+                @for (int i = 0; i < lstMTG.Count; i++)
+                {
+                    <option @if (lstMTG[i].id.Equals(Model.MucThamGia_id)) { <text> selected</text> } value='@lstMTG[i].id'>@lstMTG[i].TenMuc</option>
+                }
+            </select>
+        </div>
+    </div>
+</form>
+
+<script>
+    $(document).ready(function () {
+        $("#LoaiHoiDong_id").change(function (event$) {
+            Features.doPost('/HoiDong/_MucThamGia', { LoaiHoiDong_id : +event$.target.value}, false, 'MucThamGia_id')
+        })
+    })
+</script>
+
+

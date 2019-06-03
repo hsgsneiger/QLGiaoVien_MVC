@@ -49,9 +49,7 @@ namespace QLGiaoVien.Controllers
                     guideInfo = Guide_Service.GetByID(ID).FirstOrDefault();
                     lstGuideSystem = Configuration_Service.GetAllGuideSystemBy(guideInfo.LoaiHuongDan_id);
                 }
-                ViewBag.lstGuideSystem = lstGuideSystem;
-
-               
+                ViewBag.lstGuideSystem = lstGuideSystem;               
             }
             catch (Exception e)
             {

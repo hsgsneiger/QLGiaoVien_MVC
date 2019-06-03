@@ -4,8 +4,11 @@
 <div class="container-fluid">
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
-        <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Khảo Thí</h6>
+        <div class="card-header py-3 row">
+            <h6 class="m-0 font-weight-bold text-primary col-10">Khảo Thí</h6>
+            <button type="button" class="col-2 btn btn-primary" onclick="Features.doPost('/KhaoThi/_ChiTietKhaoThi', {}, false, 'modal-body'); Features.isUpdate = false" data-toggle="modal" data-target="#exampleModal">
+                Thêm mới
+            </button>
         </div>
         <div class="card-body">
             <div class="table-responsive">
@@ -17,6 +20,7 @@
                             <th>Lớp</th>
                             <th>Số bài</th>
                             <th>Số giờ</th>
+                            <th>Tùy Chọn</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -27,7 +31,7 @@
                                 <tr class="bg-gray-500 font-weight-bold">
                                     <td>@(i + 1)</td>
                                     <td colspan="3">@Model[i].TenLoaiKhaoThi</td>
-                                    <td>@Model[i].TongSoGio.ToString("N0")</td>
+                                    <td colspan="2">@Model[i].TongSoGio.ToString("N0")</td>
                                 </tr>
                                 for (int j = 0; j < Model[i].chiTiet.Count; j++)
                                 {
@@ -37,12 +41,13 @@
                                         <td>@Model[i].chiTiet[j].TenLop</td>
                                         <td>@Model[i].chiTiet[j].SoBai</td>
                                         <td>@Model[i].chiTiet[j].SoGio</td>
+                                        <td><i data-toggle="modal" data-target="#exampleModal" onclick="Features.doPost('/KhaoThi/_ChiTietKhaoThi', {'ID':@Model[i].chiTiet[j].id}, false, 'modal-body');Features.isUpdate=true" class="fas fa-edit"></i> / <i onclick="Features.Delete('/Ajax/KhaoThi_Xoa', {'ID':@Model[i].chiTiet[j].id})" class="fas fa-trash"></i></td>
                                     </tr>
                                 }
                             }
                             <tr class="bg-gray-500 font-weight-bold">
                                 <td colspan="4">Tổng số</td>
-                                <td>@Model.Sum(x => x.TongSoGio).ToString("N0")</td>
+                                <td colspan="2">@Model.Sum(x => x.TongSoGio).ToString("N0")</td>
                             </tr>
                         }
 
@@ -55,3 +60,36 @@
 </div>
 <!-- /.container-fluid -->
 
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Khảo Thí</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modal-body">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-primary" onclick="saveChanges()">Lưu</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function saveChanges() {
+        const obj = Features.getValueFromModal();
+        if(!obj) return;
+         obj.MaGV = +$("#GV").val();
+         obj.MaNamHoc = +$("#Nam").val();
+         obj.id = +obj.id;
+         obj.TenLop = obj.TenLop;
+         obj.LoaiHuongDan_id = +obj.LoaiHuongDan_id;
+         obj.TenKhaoThi = obj.TenKhaoThi;
+         obj.SoBai = +obj.SoBai;
+         Features.doPost("/Ajax/KhaoThi_ThemSua", { obj: obj ,isUpdate:Features.isUpdate}, true);
+    }
+</script>
