@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DAO;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Configuration;
@@ -94,6 +95,35 @@ namespace Utils
             return check;
         }
 
+        public bool RemoveRecord(string name_proc, int id)
+        {
+            bool check = true;
+            SqlCommand cmdObject = null;
+            try
+            {
+                cmdObject = new SqlCommand(name_proc, Connection);
+                cmdObject.CommandType = CommandType.StoredProcedure;
+                SqlParameter par = new SqlParameter("id", id);
+                cmdObject.Parameters.Add(par);
+                // Do something with propValue
+                if(cmdObject.ExecuteNonQuery() == 0)
+                {
+                    check = false;
+                }
+
+            } catch(Exception e)
+            {
+                check = false;
+                throw e;
+            }
+            finally
+            {
+                cmdObject.Dispose();
+                CloseConnection();
+            }
+            return check;
+        }
+
 
         public bool ExecuteProc(string name_proc,string Field, int ID)
         {
@@ -125,7 +155,44 @@ namespace Utils
             return check;
         }
 
+        public bool ExecuteProcTeach(string name_proc, Teach_DAO obj, string para)
+        {
+            bool check = true;
+            SqlCommand cmdObject = null;
+            try
+            {
+                cmdObject = new SqlCommand(name_proc, Connection);
+                cmdObject.CommandType = CommandType.StoredProcedure;
+                Type type = obj.GetType();
+                IList<PropertyInfo> props = new List<PropertyInfo>(type.GetProperties());
+                SqlParameter par = new SqlParameter();
+                foreach (PropertyInfo prop in props)
+                {
+                     par = new SqlParameter(prop.Name, prop.GetValue(obj, null));
+                    cmdObject.Parameters.Add(par);
+                    // Do something with propValue
+                }
+                par = new SqlParameter("StatementType", para);
+                cmdObject.Parameters.Add(par);
 
+                if (cmdObject.ExecuteNonQuery() == 0)
+                {
+                    check = false;
+                }
+
+            }
+            catch (Exception e)
+            {
+                check = false;
+                throw e;
+            }
+            finally
+            {
+                cmdObject.Dispose();
+                CloseConnection();
+            }
+            return check;
+        }
 
         public List<T> ExecuteProcAndGetData(string name_proc,string Field, int ID)
         {

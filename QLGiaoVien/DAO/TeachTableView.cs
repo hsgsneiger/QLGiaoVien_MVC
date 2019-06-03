@@ -11,7 +11,7 @@ namespace DAO
         [Display(Name = "Tên loại giảng dạy")]
         public string TenLoaiGiangDay { get; set; }
         public int NhomGiangDay_id { get; set; }
-        public int TongSoTC { get; set; }
+        public int TongSoTinChi { get; set; }
         public int TongSoTiet { get; set; }
 
         public float TongGioChuan { get; set; }

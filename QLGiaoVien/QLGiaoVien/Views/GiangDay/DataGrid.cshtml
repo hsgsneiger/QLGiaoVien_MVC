@@ -11,37 +11,362 @@
 <script src="http://cdn-na.infragistics.com/igniteui/2019.1/latest/js/infragistics.core.js"></script>
 <script src="http://cdn-na.infragistics.com/igniteui/2019.1/latest/js/infragistics.lob.js"></script>
 
-<table id="grid1"></table>
-<table id="grid2"></table>
-<table id="grid3"></table>
-<table id="grid4"></table>
+@for(int i = 0; i < Model.Count; i++)
+{
+    <h3>@(i+1). @Model[i].TenLoaiGiangDay</h3>
+    <table id="@("grid"+ (i+1).ToString())"></table>
+    <br />
+    <hr />
+    <br />
+}
+
+    <div class="external-content">
+        <div id="confirmDialog"></div>
+        <div id="successDialog"></div>
+        <div id="errorDialog"></div>
+    </div>
+@*<table id="grid2"></table>
+    <table id="grid3"></table>
+    <table id="grid4"></table>*@
 
 <!--Sample JSON Data-->
 
 <script type="text/javascript">
+    var lastOpenConfirmDialog = "";
+    var _ui = null;
+    var idRemove = null;
     var x;
      var lastOpenConfirmDialog = "";
         // lấy data từ model
     var data = @(Html.Raw(JsonConvert.SerializeObject(Model.ToList())));
     console.log(data)
     var lstLoaiSiSo = @(Html.Raw(JsonConvert.SerializeObject(ViewBag.lstClassSize)));
+    var lstHeGD = @(Html.Raw(JsonConvert.SerializeObject(ViewBag.lstHeGD)));
 
     function getNhomDG(id) {
         return lstLoaiSiSo.filter(x => x.NhomGiangDay_id == id);
     }
-
-    function LoaiSiSoMapper(record) {
-        return getNhomDG(record.NhomGiangDay_id).find(x => x.id == record.LoaiSiSo_id).TenLoaiSiSo;
+    function getHeGD(id) {
+        return lstHeGD.filter(x => x.NhomGiangDay_id == id);
     }
-    $(document).on("ighierarchicalgridrowexpanding", "#grid2", function (evt, ui) {
-        x = lstLoaiSiSo;
-    });
 
+    var lstHe1 = lstHeGD.filter(x => x.NhomGiangDay_id == 1);
+    var lstHe2 = lstHeGD.filter(x => x.NhomGiangDay_id == 2);
+    var lstHe3 = lstHeGD.filter(x => x.NhomGiangDay_id == 3);
+    var lstHe4 = lstHeGD.filter(x => x.NhomGiangDay_id == 4);
+    var lstSS1 = lstLoaiSiSo.filter(x => x.NhomGiangDay_id == 1);
+    var lstSS2 = lstLoaiSiSo.filter(x => x.NhomGiangDay_id == 2);
+    var lstSS4 = lstLoaiSiSo.filter(x => x.NhomGiangDay_id == 4);
+
+    var lstSS = lstLoaiSiSo.filter(x => x.NhomGiangDay_id == 1);
+
+    //function LoaiSiSoMapper(record) {
+    //    console.log(getNhomDG(record.NhomGiangDay_id).find(x => x.id == record.LoaiSiSo_id))
+    //    console.log(record.LoaiSiSo_id+ "aaaaa")
+    //    return getNhomDG(record.NhomGiangDay_id).find(x => x.id == record.LoaiSiSo_id).TenLoaiSiSo;
+    //}
+
+    //function LoaiSiSoMapper(record) {
+    //    return getNhomDG(record.NhomGiangDay_id).find(x => x.id == record.LoaiSiSo_id).TenLoaiSiSo;
+    //}
+
+    
+
+    function SumCaculator(data) {
+        if (data.length != 0)
+            return (data.map(function (v) {
+                return parseInt(v, 0);
+            }).reduce((a, b) => a + b)).toFixed(1);
+        else return 0;
+    }
+
+    function aaaaa(data) {
+        console.log(data)
+        return 1212
+    }
+
+    function CountRows(data) {
+        return data.length;
+    }
+
+    function GetQuyDoiLoaiSiSo(id){
+        return lstLoaiSiSo.find(x => x.id == id).QuyDoiGioChuan
+    }
+
+    function GetQuyDoiHe(id){
+        return 1;
+    }
+
+
+    function HeGiangDayMappe2r(val, record) {
+        //console.log(record)
+        if (record === undefined) return;
+        //console.log(GetQuyDoiLoaiSiSo(record.LoaiSiSo_id))
+
+        return (parseInt(record.SoTiet) * GetQuyDoiLoaiSiSo(record.LoaiSiSo_id) * GetQuyDoiHe(record.HeGiangDay_id)).toString();
+    }
+
+
+
+
+    // id cho 2 button ok và cancel (ngẫu nhiên), message, hàm callback khi ấn OK, hàm callback khi ấn cancel
+    function confirmDialog(btnid, message, callbackOk, callbackCancel) {
+        if (lastOpenConfirmDialog !== btnid) {
+            lastOpenConfirmDialog = btnid;
+            $("#confirmDialog").igDialog({
+                modal: true,
+                resizable: false,
+                state: "open",
+                showHeader: true,
+                showFooter: true,
+                headerText: "Xác nhận",
+                minHeight: 200,
+                footerText: "<button id='ok-" + btnid + "' type='button' class='btn btn-xs btn-danger'>" + "OK" + "</button> <button id='cancel-" + btnid + "' type='button' class='btn btn-xs btn-default'>" + "Cancel" + "</button>"
+            });
+
+            // Sự kiện khi ấn buttin cancel
+            $("#confirmDialog #cancel-" + btnid).on("click", function () {
+                //if (callbackCancel && typeof callbackCancel === "function") {
+                //    callbackCancel();
+                //}
+                $("#confirmDialog").igDialog("close");
+            });
+
+            // gọi hàm callback khi ấn ok của đialof
+            $("#confirmDialog #ok-" + btnid).on("click", function () {
+
+                if (callbackOk && typeof callbackOk === "function") {
+                    callbackOk(btnid);
+                }
+                $("#confirmDialog").igDialog("close");
+            });
+        }
+        // assign message
+        $("#confirmDialog .ui-dialog-content").text(message);
+        $("#confirmDialog").igDialog("open");
+    }
+
+    function CreateRow() {
+        if (_ui == null) return;
+        console.log(_ui)
+        $.ajax({
+            url: 'GiangDay/Create',
+            ///? ' + ' & thp=' + _ui.values.TenHocPhan + ' & Lop=' + _ui.values.Lop + ' & lss=' + _ui.values.LoaiSiSo_id + ' & hgd=' + _ui.values.HeGiangDay_id + ' & GioChuan=' + _ui.values.GioChuan  + ' & idn=' + 1 + ' & SoTinChi=' + _ui.values.SoTinChi + ' & SoTiet=' + _ui.values.SoTiet ,
+            type: 'Post',
+            data: {
+                gv_id: 1,
+                nam: 3,
+                thp: _ui.values.TenHocPhan,
+                lss: _ui.values.LoaiSiSo_id,
+                ngd: 1, // tam thoi
+                hgd: _ui.values.HeGiangDay_id,
+                lop: _ui.values.Lop,
+                st: _ui.values.SoTiet,
+                stc: _ui.values.SoTinChi,
+                gc: _ui.values.GhiChu
+            },
+            success: function (result) {
+                if (result == "Success") {
+                    // thông báo
+                    $("#successDialog .ui-dialog-content").text("Học phần %0 được cập nhật thành công".replace("%0", ui.values.TenHocPhan));
+                    $("#successDialog").igDialog("open");
+                    //$("#grid").igGridUpdating("deleteRow", Id);
+                } else {
+                    $("#successDialog .ui-dialog-content").text("Lỗi cập nhật dữ liệu");
+                    $("#successDialog").igDialog("open");
+                }
+            },
+            error: function (res) {
+                console.log(res)
+            },
+            complete: function (jqRes, textStatus) {
+            }
+        });
+    }
+
+
+
+
+
+
+    //function CreateRow() {
+    //    if (_ui == null) return;
+    //    $.ajax({
+    //        url: 'GiangDay/Create/?' + '&thp=' + _ui.values.TenHocPhan + '&Lop=' + _ui.values.Lop + '&lss=' + _ui.values.LoaiSiSo_id + '&hgd=' + _ui.values.HeGiangDay_id + '&GioChuan=' + _ui.values.GioChuan + '&idn=' + 1 + '&SoTinChi=' + _ui.values.SoTinChi + '&SoTiet=' + _ui.values.SoTiet,
+    //        type: 'Post',
+    //        async: true,
+    //        //data: {
+    //        //   GhiChu: ""
+    //        //},
+    //        dataType: 'json',
+    //        cache: false,
+    //        processData: false,
+    //        contentType: false,
+    //        success: function (result) {
+    //            if (result == "Success") {
+    //                // thông báo
+    //                $("#successDialog .ui-dialog-content").text("Học phần %0 được cập nhật thành công".replace("%0", ui.values.TenHocPhan));
+    //                $("#successDialog").igDialog("open");
+    //                //$("#grid").igGridUpdating("deleteRow", Id);
+    //            } else {
+    //                $("#successDialog .ui-dialog-content").text("Lỗi cập nhật dữ liệu");
+    //                $("#successDialog").igDialog("open");
+    //            }
+    //        },
+    //        error: function (res) {
+    //            console.log(res)
+    //        },
+    //        complete: function (jqRes, textStatus) {
+    //        }
+    //    });
+    //}
+
+    function EditRow() {
+        if (_ui == null) return;
+        $.ajax({
+            url: 'GiangDay/Edit/?' + 'id=' + _ui.oldValues.id + '&thp=' + _ui.values.TenHocPhan + '&Lop=' + _ui.values.Lop + '&lss=' + _ui.values.LoaiSiSo_id + '&hgd=' + _ui.values.HeGiangDay_id + '&GioChuan=' + _ui.values.GioChuan + '&SoTinChi=' + _ui.values.SoTinChi + '&SoTiet=' + _ui.values.SoTiet ,
+            type: 'Post',
+            async: true,
+            //data: {
+            //    id: _ui.oldValues.id,
+            //    //'GhiChu': _ui.values.GhiChu,
+            //    //'GioChuan': _ui.values.GioChuan,
+            //    //'HeGiangDay_id': _ui.values.HeGiangDay_id,
+            //    //'LoaiSiSo_id': _ui.values.LoaiSiSo_id,
+            //    //'Lop': _ui.values.Lop,
+            //    //'SoTinChi': _ui.values.SoTinChi,
+            //    //'SoTiet': _ui.values.SoTiet,
+            //    //'TenHocPhan': _ui.values.TenHocPhan
+            //},
+            dataType: 'json',
+            cache: false,
+            processData: false,
+            contentType: false,
+            success: function (result) {
+                if (result == "Success") {
+                    // thông báo
+                    $("#successDialog .ui-dialog-content").text("Học phần %0 được cập nhật thành công".replace("%0", _ui.oldValues.TenHocPhan));
+                    $("#successDialog").igDialog("open");
+                    //$("#grid").igGridUpdating("deleteRow", Id);
+                } else {
+                    $("#successDialog .ui-dialog-content").text("Lỗi cập nhật dữ liệu");
+                    $("#successDialog").igDialog("open");
+                }
+            },
+            error: function (res) {
+                console.log(res)
+            },
+            complete: function (jqRes, textStatus) {
+            }
+        });
+    }
+
+    function DeleteTeach() {
+        if (idRemove == null) return;
+        //$.post("GiangDay/Delete",
+        //    {
+        //        id: idRemove
+        //    })
+        $.ajax({
+            url: 'GiangDay/Delete',
+            type: 'post',
+            data: {
+                id: idRemove
+            },
+            success: function (result) {
+                if (result == "Success") {
+                    console.log(result)
+                    $("#successDialog .ui-dialog-content").text("Học phần đã được xoá cập nhật thành công");
+                    $("#successDialog").igDialog("open");
+                    //$("#grid").igGridUpdating("deleteRow", Id);
+                } else {
+                    $("#successDialog .ui-dialog-content").text("Lỗi xoá dữ liệu");
+                    $("#successDialog").igDialog("open");
+                }
+            },
+            error: function (res) {
+                console.log(res)
+            },
+            complete: function (jqRes, textStatus) {
+                this.idRemove = null;
+            }
+        });
+    }
+
+    ///
+    /// jQuery
+    ///
     $(function () {
+        $("#successDialog").igDialog({
+            modal: true,
+            resizable: false,
+            state: "closed",
+            showHeader: true,
+            showFooter: true,
+            footerText: "<button id='ok-close' type='button' class='btn btn-xs btn-success'>OK</button>"
+        });
 
+        $("#successDialog #ok-close").on("click", function () {
+            $("#successDialog").igDialog("close");
+            window.isFreshButton = true;
+            location.reload();
+        });
+
+        //Bind after initialization
+        var j = $("#grid1_summaries_footer_row_text_container_custom1_GioChuan")
+        console.log(j)
+        //Bind edit even
+        $(document).on("iggridupdatingeditrowended", "#grid1,#grid2,#grid3,#grit4", function (evt, ui) {
+
+            if (ui.rowAdding == true) {
+                console.log("insert")
+                console.log(ui)
+                _ui = ui;
+                confirmDialog("btnsrows", "Xác nhận thêm mới bản ghi?", CreateRow, null);
+            } else if (ui.update == true) {
+                console.log(ui)
+                _ui = ui;
+                confirmDialog("btnsrow", "Xác nhận thay đổi bản ghi?", EditRow, null);
+            }
+            
+        });
+
+        //Bind after initialization
+        $(document).on("iggridupdatingrowdeleted", "#grid1,#grid2,#grid3,#grit4", function (evt, ui) {
+            idRemove = ui.element[0].dataset.id;
+            console.log(ui)
+            confirmDialog("btnsrow2", "Xác nhận Xoá Giảng Dạy?", DeleteTeach, null);
+        });
 
         /*----------------- Instantiation -------------------------*/
-        $("#grid2").igHierarchicalGrid({
+        $("#grid1").igHierarchicalGrid({
+            primaryKey: "id",
+            width: "100%",
+            columns: [
+                { key: "id", headerText: "", dataType: "number", width: "0%", hidden: true },
+                { key: "NhomGiangDay_id", headerText: "", dataType: "number", width: "0%", hidden: true },
+                { key: "TenHocPhan", headerText: "Tên Học Phần", dataType: "string", width: "*" },
+                {
+                    key: "LoaiSiSo_id", headerText: "Sĩ số", dataType: "number", width: "5%", formatter: function (val) {
+                        return lstLoaiSiSo.find(x => x.id == val).TenLoaiSiSo;
+                    }},
+                {
+                    key: "HeGiangDay_id", headerText: "Hệ", dataType: "number", width: "*", formatter: function (val) {
+                            return lstHeGD.find(x => x.id == val).TenHeGiangDay;
+                        }
+                },
+                { key: "Lop", headerText: "Lớp", dataType: "string", width: "*" },
+                { key: "SoTinChi", headerText: "Số tín chỉ", dataType: "number", width: "*" },
+                { key: "SoTiet", headerText: "Số Tiết", dataType: "number", width: "*" },
+                { key: "GioChuan", headerText: "Số Giờ Chuẩn", dataType: "object", width: "*", formatter: HeGiangDayMappe2r },
+                { key: "GhiChu", headerText: "Ghi chú", dataType: "string", width: "*" }
+            ],
+            autofitLastColumn: false,
+            autoGenerateColumns: false,
+            dataSource: data[0].lstGiangDay,
+            updateUrl: "GiangDay/Edit",
+            responseDataKey: "results",
+            autoCommit: true,
             features: [
                 {
                     name: "Responsive",
@@ -49,109 +374,547 @@
                 },
                 {
                     name: "Updating",
-                    enableAddRow: false,
-                    enableDeleteRow: false,
-                    editMode: "none",
+                    enableAddRow: true,
+                    autoCommit: true,
+                    enableDeleteRow: true,
+                    editMode: "row",
                     columnSettings:
                         [
                             {
-                                columnKey: "id",
+                                columnKey: "TenHocPhan",
+                                editorOptions: { disabled: false },
                                 required: true
-                            }
-                        ]
-                }
-            ],
-            width: "100%",
-            autoCommit: true,
-            dataSource: data,
-            dataSourceType: "json",
-            responseDataKey: "results",
-            primaryKey: "NhomGiangDay_id",
-            autoGenerateColumns: false,
-            columns: [
-                { key: "NhomGiangDay_id", headerText: "Employee ID", dataType: "number", width: "0%", hidden: true },
-                { key: "TenLoaiGiangDay", headerText: "Loại Giảng Dạy", dataType: "string", width: "*" },
-                { key: "TongSoTC", headerText: "Tổng Số Tín Chỉ", dataType: "string", width: "*" },
-                { key: "TongSoTiet", headerText: "Tổng số tiết", dataType: "string", width: "*" },
-                { key: "TongGioChuan", headerText: "Số Giờ Chuẩn", dataType: "string", width: "*" }
-            ],
-            autofitLastColumn: false,
-            childrenDataProperty: "lstGiangDay",
-            autoGenerateLayouts: false,
-            //defaultChildrenDataProperty: "childLayout",
-            columnLayouts: [
-                {
-                    key: "lstGiangDay",
-                    width: "100%",
-                    autoGenerateColumns: true,
-                    autofitLastColumn: false,
-                    primaryKey: "id",
-                    //autoCommit: true,
-                    columns: [
-                        { key: "id", headerText: "", dataType: "number", width: "0%", hidden: true },
-                        { key: "NamHoc", headerText: "", dataType: "number", width: "0%", hidden: true },
-                        { key: "ThoiGian", headerText: "", dataType: "number", width: "0%", hidden: true },
-                        { key: "NamHoc_id", headerText: "", dataType: "number", width: "0%", hidden: true },
-                        { key: "NhomGiangDay_id", headerText: "", dataType: "number", width: "0%", hidden: true },
-                        { key: "TenHocPhan", headerText: "Tên Học Phần", dataType: "string", width: "*" },
-                        { key: "LoaiSiSo_id", headerText: "Sĩ số", dataType: "object", width: "*", mapper: LoaiSiSoMapper},
-                        { key: "HeGiangDay_id", headerText: "Hệ", dataType: "string", width: "*" },
-                        { key: "Lop", headerText: "Lớp", dataType: "string", width: "*" },
-                        { key: "SoTC", headerText: "Số tín chỉ", dataType: "string", width: "*" },
-                        { key: "SoTiet", headerText: "Số Tiết", dataType: "string", width: "*" },
-                        { key: "GioChuan", headerText: "Số Giờ Chuẩn", dataType: "string", width: "*" },
-                        { key: "GhiChu", headerText: "Ghi chú", dataType: "string", width: "*" }
-                    ],
-                    features: [
-                        {
-                            name: "Responsive",
-                           // enableVerticalRendering: true,
-                            //columnSettings: [
-                            //    {
-                            //        columnKey: "ShipAddress",
-                            //        classes: "ui-hidden-phone"
-                            //    },
-                            //    {
-                            //        columnKey: "ShipCity",
-                            //        classes: "ui-hidden-phone"
-                            //    }
-                            //]
-                        },
-                        //{
-                        //    name: "Paging",
-                        //    pageSize: 10
-                        //},
-                        {
-                            name: "Updating",
-                            enableAddRow: true,
-                            enableDeleteRow: true,
-                            editMode: "row",
-                            rowEditDialogOptions: {
-                                height: "350px",
-                                width: "390px",
-                                containment: "window",
-                                showDoneCancelButtons: true
                             },
-                            columnSettings: [
+                            {
+                                columnKey: "SoTinChi",
+                                editorOptions: { disabled: false }
+                            },
+                            {
+                                columnKey: "SoTiet",
+                                editorOptions: { disabled: false }
+                            },
+                            {
+                                columnKey: "GioChuan",
+                                editorOptions: { disabled: true }
+                            },
+                            {
+
+                                columnKey: "LoaiSiSo_id",
+                                editorType: 'combo',
+                                required: true,
+                                editorOptions: {
+                                    mode: "dropdown",
+                                    dataSource: lstSS1,
+                                    textKey: "TenLoaiSiSo",
+                                    valueKey: "id"
+                                }
+                            },
+                            {
+                                //The combo is defined as an editor provider. Combo options are defined under 'editorOptions'.
+                                columnKey: "HeGiangDay_id",
+                                editorType: 'combo',
+                                required: true,
+                                editorOptions: {
+                                    mode: "dropdown",
+                                    dataSource: lstHe1,
+                                    textKey: "TenHeGiangDay",
+                                    valueKey: "id"
+                                }
+                            }
+
+                        ]
+                },
+                {
+                    name: "ColumnMoving"
+                },
+                {
+                    name: "Summaries",
+                    summaryExecution: "priortofilteringandpaging",
+                    columnSettings: [
+                        { columnKey: "LoaiSiSo_id", allowSummaries: false },
+                        { columnKey: "HeGiangDay_id", allowSummaries: false },
+                        { columnKey: "Lop", allowSummaries: false },
+                        { columnKey: "GhiChu", allowSummaries: false },
+                        {
+                            columnKey: "TenHocPhan",
+                            summaryOperands: [
                                 {
-                                    columnKey: "id",
-                                    required: true
-                                },
+                                    rowDisplayLabel: "Số lượng học phần:",
+                                    type: "custom1",
+                                    summaryCalculator: $.proxy(CountRows, this),
+                                    order: 5
+                                }
+                            ]
+                        },
+                        {
+                            columnKey: "SoTinChi",
+                            summaryOperands: [
                                 {
-                                    columnKey: "LoaiSiSo_id",
-                                    editorType: "combo",
-                                    editorOptions: {
-                                        dataSource: data,
-                                        textKey: "TenLoaiGiangDay",
-                                        valueKey: "NhomGiangDay_id",
-                                        mode: "dropdown"
-                                    }
+                                    rowDisplayLabel: "Tổng:",
+                                    type: "custom1",
+                                    summaryCalculator: $.proxy(SumCaculator, this),
+                                    order: 5
+                                }
+                            ]
+                        },
+                        {
+                            columnKey: "SoTiet",
+                            summaryOperands: [
+                                {
+                                    rowDisplayLabel: "Tổng:",
+                                    type: "custom1",
+                                    summaryCalculator: $.proxy(SumCaculator, this),
+                                    order: 5
+                                }
+                            ]
+                        },
+                        {
+                            columnKey: "GioChuan",
+                            summaryOperands: [
+                                {
+                                    rowDisplayLabel: "Tổng:",
+                                    type: "custom1",
+                                    summaryCalculator: 1212,
+                                    order: 5
                                 }
                             ]
                         }
                     ]
                 }
             ]
+            //defaultChildrenDataProperty: "childLayout",
+        });
+
+        $("#grid2").igHierarchicalGrid({
+            primaryKey: "id",
+            width: "100%",
+            columns: [
+                { key: "id", headerText: "", dataType: "number", width: "0%", hidden: true },
+                { key: "NhomGiangDay_id", headerText: "", dataType: "number", width: "0%", hidden: true },
+                { key: "TenHocPhan", headerText: "Tên Học Phần", dataType: "string", width: "*" },
+                {
+                    key: "LoaiSiSo_id", headerText: "Sĩ số", dataType: "number", width: "5%", formatter: function (val) {
+                        return lstLoaiSiSo.find(x => x.id == val).TenLoaiSiSo;
+                    }
+                },
+                {
+                    key: "HeGiangDay_id", headerText: "Hệ", dataType: "number", width: "*", formatter: function (val) {
+                        return lstHeGD.find(x => x.id == val).TenHeGiangDay;
+                    }
+                },
+                { key: "Lop", headerText: "Lớp", dataType: "string", width: "*" },
+                { key: "SoTinChi", headerText: "Số tín chỉ", dataType: "number", width: "*" },
+                { key: "SoTiet", headerText: "Số Tiết", dataType: "number", width: "*" },
+                { key: "GioChuan", headerText: "Số Giờ Chuẩn", dataType: "object", width: "*", formatter: HeGiangDayMappe2r },
+                { key: "GhiChu", headerText: "Ghi chú", dataType: "string", width: "*" }
+            ],
+            autofitLastColumn: false,
+            autoGenerateColumns: false,
+            dataSource: data[1].lstGiangDay,
+            updateUrl: "GiangDay/Edit",
+            responseDataKey: "results",
+            autoCommit: true,
+            features: [
+                {
+                    name: "Responsive",
+                    enableVerticalRendering: false
+                },
+                {
+                    name: "Updating",
+                    enableAddRow: true,
+                    autoCommit: true,
+                    enableDeleteRow: true,
+                    editMode: "row",
+                    columnSettings:
+                        [
+                            {
+                                columnKey: "TenHocPhan",
+                                editorOptions: { disabled: false },
+                                required: true
+                            },
+                            {
+                                columnKey: "SoTinChi",
+                                editorOptions: { disabled: false }
+                            },
+                            {
+                                columnKey: "SoTiet",
+                                editorOptions: { disabled: false }
+                            },
+                            {
+                                columnKey: "GioChuan",
+                                editorOptions: { disabled: true }
+                            },
+                            {
+
+                                columnKey: "LoaiSiSo_id",
+                                editorType: 'combo',
+                                required: true,
+                                editorOptions: {
+                                    mode: "dropdown",
+                                    dataSource: lstSS2,
+                                    textKey: "TenLoaiSiSo",
+                                    valueKey: "id"
+                                }
+                            },
+                            {
+                                //The combo is defined as an editor provider. Combo options are defined under 'editorOptions'.
+                                columnKey: "HeGiangDay_id",
+                                editorType: 'combo',
+                                required: true,
+                                editorOptions: {
+                                    mode: "dropdown",
+                                    dataSource: lstHe2,
+                                    textKey: "TenHeGiangDay",
+                                    valueKey: "id"
+                                }
+                            }
+
+                        ]
+                },
+                {
+                    name: "ColumnMoving"
+                },
+                {
+                    name: "Summaries",
+                    summaryExecution: "priortofilteringandpaging",
+                    columnSettings: [
+                        { columnKey: "LoaiSiSo_id", allowSummaries: false },
+                        { columnKey: "HeGiangDay_id", allowSummaries: false },
+                        { columnKey: "Lop", allowSummaries: false },
+                        { columnKey: "GhiChu", allowSummaries: false },
+                        {
+                            columnKey: "TenHocPhan",
+                            summaryOperands: [
+                                {
+                                    rowDisplayLabel: "Số lượng học phần:",
+                                    type: "custom1",
+                                    summaryCalculator: $.proxy(CountRows, this),
+                                    order: 5
+                                }
+                            ]
+                        },
+                        {
+                            columnKey: "SoTinChi",
+                            summaryOperands: [
+                                {
+                                    rowDisplayLabel: "Tổng:",
+                                    type: "custom1",
+                                    summaryCalculator: $.proxy(SumCaculator, this),
+                                    order: 5
+                                }
+                            ]
+                        },
+                        {
+                            columnKey: "SoTiet",
+                            summaryOperands: [
+                                {
+                                    rowDisplayLabel: "Tổng:",
+                                    type: "custom1",
+                                    summaryCalculator: $.proxy(SumCaculator, this),
+                                    order: 5
+                                }
+                            ]
+                        },
+                        {
+                            columnKey: "GioChuan",
+                            summaryOperands: [
+                                {
+                                    rowDisplayLabel: "Tổng:",
+                                    type: "custom1",
+                                    summaryCalculator: $.proxy(SumCaculator, this),
+                                    order: 5
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+            //defaultChildrenDataProperty: "childLayout",
+        });
+        $("#grid3").igHierarchicalGrid({
+            primaryKey: "id",
+            width: "100%",
+            columns: [
+                { key: "id", headerText: "", dataType: "number", width: "0%", hidden: true },
+                { key: "NhomGiangDay_id", headerText: "", dataType: "number", width: "0%", hidden: true },
+                { key: "TenHocPhan", headerText: "Tên Học Phần", dataType: "string", width: "*" },
+                {
+                    key: "LoaiSiSo_id", headerText: "Sĩ số", dataType: "number", width: "5%", formatter: function (val) {
+                        return lstLoaiSiSo.find(x => x.id == val).TenLoaiSiSo;
+                    }
+                },
+                {
+                    key: "HeGiangDay_id", headerText: "Hệ", dataType: "number", width: "*", formatter: function (val) {
+                        return lstHeGD.find(x => x.id == val).TenHeGiangDay;
+                    }
+                },
+                { key: "Lop", headerText: "Lớp", dataType: "string", width: "*" },
+                { key: "SoTinChi", headerText: "Số tín chỉ", dataType: "number", width: "*" },
+                { key: "SoTiet", headerText: "Số Tiết", dataType: "number", width: "*" },
+                { key: "GioChuan", headerText: "Số Giờ Chuẩn", dataType: "object", width: "*", formatter: HeGiangDayMappe2r },
+                { key: "GhiChu", headerText: "Ghi chú", dataType: "string", width: "*" }
+            ],
+            autofitLastColumn: false,
+            autoGenerateColumns: false,
+            dataSource: data[2].lstGiangDay,
+            updateUrl: "GiangDay/Edit",
+            responseDataKey: "results",
+            autoCommit: true,
+            features: [
+                {
+                    name: "Responsive",
+                    enableVerticalRendering: false
+                },
+                {
+                    name: "Updating",
+                    enableAddRow: true,
+                    autoCommit: true,
+                    enableDeleteRow: true,
+                    editMode: "row",
+                    columnSettings:
+                        [
+                            {
+                                columnKey: "TenHocPhan",
+                                editorOptions: { disabled: false },
+                                required: true
+                            },
+                            {
+                                columnKey: "SoTinChi",
+                                editorOptions: { disabled: false }
+                            },
+                            {
+                                columnKey: "SoTiet",
+                                editorOptions: { disabled: false }
+                            },
+                            {
+                                columnKey: "GioChuan",
+                                editorOptions: { disabled: true }
+                            },
+                            {
+
+                                columnKey: "LoaiSiSo_id"
+                                
+                            },
+                            {
+                                //The combo is defined as an editor provider. Combo options are defined under 'editorOptions'.
+                                columnKey: "HeGiangDay_id",
+                                editorType: 'combo',
+                                required: true,
+                                editorOptions: {
+                                    mode: "dropdown",
+                                    dataSource: lstHe3,
+                                    textKey: "TenHeGiangDay",
+                                    valueKey: "id"
+                                }
+                            }
+
+                        ]
+                },
+                {
+                    name: "ColumnMoving"
+                },
+                {
+                    name: "Summaries",
+                    summaryExecution: "priortofilteringandpaging",
+                    columnSettings: [
+                        { columnKey: "LoaiSiSo_id", allowSummaries: false },
+                        { columnKey: "HeGiangDay_id", allowSummaries: false },
+                        { columnKey: "Lop", allowSummaries: false },
+                        { columnKey: "GhiChu", allowSummaries: false },
+                        {
+                            columnKey: "TenHocPhan",
+                            summaryOperands: [
+                                {
+                                    rowDisplayLabel: "Số lượng học phần:",
+                                    type: "custom1",
+                                    summaryCalculator: $.proxy(CountRows, this),
+                                    order: 5
+                                }
+                            ]
+                        },
+                        {
+                            columnKey: "SoTinChi",
+                            summaryOperands: [
+                                {
+                                    rowDisplayLabel: "Tổng:",
+                                    type: "custom1",
+                                    summaryCalculator: $.proxy(SumCaculator, this),
+                                    order: 5
+                                }
+                            ]
+                        },
+                        {
+                            columnKey: "SoTiet",
+                            summaryOperands: [
+                                {
+                                    rowDisplayLabel: "Tổng:",
+                                    type: "custom1",
+                                    summaryCalculator: $.proxy(SumCaculator, this),
+                                    order: 5
+                                }
+                            ]
+                        },
+                        {
+                            columnKey: "GioChuan",
+                            summaryOperands: [
+                                {
+                                    rowDisplayLabel: "Tổng:",
+                                    type: "custom1",
+                                    summaryCalculator: $.proxy(SumCaculator, this),
+                                    order: 5
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+            //defaultChildrenDataProperty: "childLayout",
+        });
+        $("#grid4").igHierarchicalGrid({
+            primaryKey: "id",
+            width: "100%",
+            columns: [
+                { key: "id", headerText: "", dataType: "number", width: "0%", hidden: true },
+                { key: "NhomGiangDay_id", headerText: "", dataType: "number", width: "0%", hidden: true },
+                { key: "TenHocPhan", headerText: "Tên Học Phần", dataType: "string", width: "*" },
+                {
+                    key: "LoaiSiSo_id", headerText: "Sĩ số", dataType: "number", width: "5%", formatter: function (val) {
+                        return lstLoaiSiSo.find(x => x.id == val).TenLoaiSiSo;
+                    }
+                },
+                {
+                    key: "HeGiangDay_id", headerText: "Hệ", dataType: "number", width: "*", formatter: function (val) {
+                        return lstHeGD.find(x => x.id == val).TenHeGiangDay;
+                    }
+                },
+                { key: "Lop", headerText: "Lớp", dataType: "string", width: "*" },
+                { key: "SoTinChi", headerText: "Số tín chỉ", dataType: "number", width: "*" },
+                { key: "SoTiet", headerText: "Số Tiết", dataType: "number", width: "*" },
+                { key: "GioChuan", headerText: "Số Giờ Chuẩn", dataType: "object", width: "*", formatter: HeGiangDayMappe2r },
+                { key: "GhiChu", headerText: "Ghi chú", dataType: "string", width: "*" }
+            ],
+            autofitLastColumn: false,
+            autoGenerateColumns: false,
+            dataSource: data[3].lstGiangDay,
+            updateUrl: "GiangDay/Edit",
+            responseDataKey: "results",
+            autoCommit: true,
+            features: [
+                {
+                    name: "Responsive",
+                    enableVerticalRendering: false
+                },
+                {
+                    name: "Updating",
+                    enableAddRow: true,
+                    autoCommit: true,
+                    enableDeleteRow: true,
+                    editMode: "row",
+                    columnSettings:
+                        [
+                            {
+                                columnKey: "TenHocPhan",
+                                editorOptions: { disabled: false },
+                                required: true
+                            },
+                            {
+                                columnKey: "SoTinChi",
+                                editorOptions: { disabled: false }
+                            },
+                            {
+                                columnKey: "SoTiet",
+                                editorOptions: { disabled: false }
+                            },
+                            {
+                                columnKey: "GioChuan",
+                                editorOptions: { disabled: true }
+                            },
+                            {
+
+                                columnKey: "LoaiSiSo_id",
+                                editorType: 'combo',
+                                required: true,
+                                editorOptions: {
+                                    mode: "dropdown",
+                                    dataSource: lstSS4,
+                                    textKey: "TenLoaiSiSo",
+                                    valueKey: "id"
+                                }
+                            },
+                            {
+                                //The combo is defined as an editor provider. Combo options are defined under 'editorOptions'.
+                                columnKey: "HeGiangDay_id",
+                                editorType: 'combo',
+                                required: true,
+                                editorOptions: {
+                                    mode: "dropdown",
+                                    dataSource: lstHe4,
+                                    textKey: "TenHeGiangDay",
+                                    valueKey: "id"
+                                }
+                            }
+
+                        ]
+                },
+                {
+                    name: "ColumnMoving"
+                },
+               {
+                    name: "Summaries",
+                    summaryExecution: "priortofilteringandpaging",
+                    columnSettings: [
+                        { columnKey: "LoaiSiSo_id", allowSummaries: false },
+                        { columnKey: "HeGiangDay_id", allowSummaries: false },
+                        { columnKey: "Lop", allowSummaries: false },
+                        { columnKey: "GhiChu", allowSummaries: false },
+                        {
+                            columnKey: "TenHocPhan",
+                            summaryOperands: [
+                                {
+                                    rowDisplayLabel: "Số lượng học phần:",
+                                    type: "custom1",
+                                    summaryCalculator: $.proxy(CountRows, this),
+                                    order: 5
+                                }
+                            ]
+                        },
+                        {
+                            columnKey: "SoTinChi",
+                            summaryOperands: [
+                                {
+                                    rowDisplayLabel: "Tổng:",
+                                    type: "custom1",
+                                    summaryCalculator: $.proxy(SumCaculator, this),
+                                    order: 5
+                                }
+                            ]
+                        },
+                        {
+                            columnKey: "SoTiet",
+                            summaryOperands: [
+                                {
+                                    rowDisplayLabel: "Tổng:",
+                                    type: "custom1",
+                                    summaryCalculator: $.proxy(SumCaculator, this),
+                                    order: 5
+                                }
+                            ]
+                        },
+                        {
+                            columnKey: "GioChuan",
+                            summaryOperands: [
+                                {
+                                    rowDisplayLabel: "Tổng:",
+                                    type: "custom1",
+                                    summaryCalculator: $.proxy(SumCaculator, this),
+                                    order: 5
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+            //defaultChildrenDataProperty: "childLayout",
         });
     });
 </script>

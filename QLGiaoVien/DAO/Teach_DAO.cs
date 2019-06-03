@@ -11,14 +11,13 @@ namespace DAO
         public int NhomGiangDay_id { get; set; }
         public string TenHocPhan { get; set; }
         public string Lop { get; set; }
-        public string NamHoc { get; set; }
         public int SoTiet { get; set; }
         public string GhiChu { get; set; }
         public int LoaiSiSo_id { get; set; }
         public int HeGiangDay_id { get; set; }
-        public double GioChuan { get; set; }
-        public DateTime ThoiGian { get; set; }
         public int NamHoc_id { get; set; }
-        public int SoTC { get; set; }
+        public int SoTinChi { get; set; }
+        public double GioChuan { get; set; }
+        public int GiaoVien_id { get; set; }
     }
 }
